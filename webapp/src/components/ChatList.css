@@ -1,0 +1,109 @@
+.chat-list {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: var(--paper-raised);
+  border-right: 1px solid var(--rule-soft);
+}
+
+.chat-list__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-4) var(--space-4) var(--space-3);
+  border-bottom: 1px solid var(--rule-soft);
+}
+
+.chat-list__title {
+  font-family: var(--font-display);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--ink-soft);
+}
+
+.chat-list__count {
+  font-family: var(--font-display);
+  font-size: 12px;
+  color: var(--ink-soft);
+  background: var(--paper);
+  padding: 2px 8px;
+  border-radius: 10px;
+}
+
+.chat-list__items {
+  overflow-y: auto;
+  flex: 1;
+}
+
+.chat-stub {
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: stretch;
+  text-align: left;
+  background: none;
+  border: none;
+  border-bottom: 1px dashed var(--rule);
+  padding: var(--space-3) var(--space-4);
+  cursor: pointer;
+  transition: background 0.12s ease;
+}
+
+.chat-stub:hover {
+  background: var(--paper);
+}
+
+.chat-stub--active {
+  background: var(--teal-active-soft);
+}
+
+.chat-stub__notch {
+  position: absolute;
+  left: -6px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--paper);
+  border: 1px solid var(--rule);
+}
+
+.chat-stub__body {
+  flex: 1;
+  min-width: 0;
+}
+
+.chat-stub__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  margin-bottom: 4px;
+}
+
+.chat-stub__nombre {
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--ink);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.chat-stub__preview {
+  margin: 0;
+  font-size: 13px;
+  color: var(--ink-soft);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.chat-list__empty {
+  padding: var(--space-5);
+  text-align: center;
+  color: var(--ink-soft);
+  font-size: 14px;
+}

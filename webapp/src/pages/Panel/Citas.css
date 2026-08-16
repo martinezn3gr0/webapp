@@ -1,0 +1,119 @@
+.citas-page {
+  padding: var(--space-5);
+  overflow-y: auto;
+  height: 100%;
+}
+
+.citas-page__header h1 {
+  font-family: var(--font-display);
+  font-size: 18px;
+  margin: 0 0 var(--space-4);
+  color: var(--ink);
+}
+
+.citas-page__loading,
+.citas-page__empty {
+  color: var(--ink-soft);
+  text-align: center;
+  padding: var(--space-5);
+}
+
+.citas-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  max-width: 640px;
+}
+
+.cita-card {
+  display: grid;
+  grid-template-columns: 64px 1fr auto;
+  align-items: center;
+  gap: var(--space-3);
+  background: var(--paper-raised);
+  border: 1px solid var(--rule-soft);
+  border-radius: var(--radius-md);
+  padding: var(--space-3);
+}
+
+.cita-card__fecha {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: var(--font-display);
+  background: var(--paper);
+  border-radius: var(--radius-sm);
+  padding: 8px 4px;
+}
+
+.cita-card__dia {
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+
+.cita-card__hora {
+  font-size: 12px;
+  color: var(--ink-soft);
+}
+
+.cita-card__info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.cita-card__nombre {
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--ink);
+}
+
+.cita-card__notas {
+  font-size: 12px;
+  color: var(--ink-soft);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cita-card__estado {
+  font-family: var(--font-display);
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  border: 1px solid;
+  border-radius: 4px;
+  padding: 3px 8px;
+  grid-column: 3;
+  grid-row: 1;
+}
+
+.cita-card__acciones {
+  grid-column: 1 / -1;
+  display: flex;
+  gap: var(--space-2);
+  margin-top: var(--space-2);
+}
+
+.cita-card__btn {
+  font-size: 12px;
+  font-weight: 700;
+  padding: 6px 12px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--rule);
+  background: var(--paper);
+  cursor: pointer;
+}
+
+.cita-card__btn--confirm {
+  background: var(--teal-active);
+  color: white;
+  border-color: var(--teal-active);
+}
+
+.cita-card__btn--cancel {
+  color: var(--red-alert);
+  border-color: var(--red-alert);
+}
