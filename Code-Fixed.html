@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="es-MX"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Instalaciones Eléctricas J-G — Electricista en CDMX y Estado de México</title>
+<meta content="Técnico electricista con 9 años de experiencia. Instalaciones residenciales y comerciales, mantenimiento y reparación en Ciudad de México y Estado de México. Cotización sin costo por WhatsApp." name="description"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&amp;family=Inter:wght@400;500;600;700&amp;family=IBM+Plex+Mono:wght@500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#2e5bff", // Electric Blue
+            "primary-bright": "#dde1ff",
+            "graphite": "#121317",
+            "graphite-low": "#1a1b20",
+            "graphite-high": "#292a2e",
+            "surface-glass": "rgba(18, 19, 23, 0.6)",
+            "blue-glow": "rgba(46, 91, 255, 0.3)",
+            "electric-green": "#00eefc"
+          },
+          fontFamily: {
+            headline: ["Space Grotesk", "sans-serif"],
+            body: ["Inter", "sans-serif"],
+            mono: ["IBM Plex Mono", "monospace"]
+          },
+          animation: {
+            'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+            'float': 'float 6s ease-in-out infinite',
+          },
+          keyframes: {
+            float: {
+              '0%, 100%': { transform: 'translateY(0)' },
+              '50%': { transform: 'translateY(-10px)' },
+            }
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    body {
+      background-color: #121317;
+      color: #e3e2e8;
+      font-family: 'Inter', sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .glass {
+      background: rgba(26, 27, 32, 0.7);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .text-gradient {
+      background: linear-gradient(135deg, #2e5bff 0%, #124af0 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .grid-bg {
+      background-image: 
+        linear-gradient(rgba(46, 91, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(46, 91, 255, 0.03) 1px, transparent 1px);
+      background-size: 40px 40px;
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .reveal.active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .btn-glow:hover {
+      box-shadow: 0 0 20px rgba(46, 91, 255, 0.4);
+    }
+
+    .glow-dot {
+      box-shadow: 0 0 8px currentColor;
+    }
+
+    /* Custom Toggles for Services */
+    .toggle-track {
+      width: 32px;
+      height: 18px;
+      background: #343439;
+      border-radius: 99px;
+      position: relative;
+      transition: background 0.3s ease;
+    }
+    .service-card:hover .toggle-track {
+      background: #2e5bff;
+    }
+    .toggle-thumb {
+      width: 12px;
+      height: 12px;
+      background: white;
+      border-radius: 50%;
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      transition: transform 0.3s ease;
+    }
+    .service-card:hover .toggle-thumb {
+      transform: translateX(14px);
+    }
+  </style>
+</head>
+<body class="overflow-x-hidden selection:bg-primary selection:text-white">
+<!-- NAVIGATION -->
+<header class="fixed top-0 w-full z-50 glass border-b border-white/5">
+<nav class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+<a class="flex items-center gap-3 group" href="#top">
+<div class="w-10 h-10 border-2 border-primary/50 flex items-center justify-center rounded-sm group-hover:border-primary transition-colors">
+<div class="w-1.5 h-4 bg-primary shadow-[0_0_10px_#2e5bff]"></div>
+</div>
+<span class="font-headline font-bold text-lg tracking-tight">Instalaciones Eléctricas J-G</span>
+</a>
+<div class="hidden lg:flex items-center gap-8">
+<a class="text-sm font-medium hover:text-primary transition-colors" href="#servicios">Servicios</a>
+<a class="text-sm font-medium hover:text-primary transition-colors" href="#proceso">Cómo funciona</a>
+<a class="text-sm font-medium hover:text-primary transition-colors" href="#trabajos">Trabajos</a>
+<a class="text-sm font-medium hover:text-primary transition-colors" href="#cobertura">Cobertura</a>
+<a class="text-sm font-medium hover:text-primary transition-colors" href="#contacto">Contacto</a>
+</div>
+<a class="bg-primary text-white font-mono text-xs font-bold uppercase tracking-widest px-6 py-3 rounded-sm hover:bg-primary-bright hover:text-graphite transition-all btn-glow hidden sm:block" href="https://wa.me/525658105587" target="_blank">
+        WhatsApp
+      </a>
+</nav>
+</header>
+<main id="top">
+<!-- HERO SECTION -->
+<section class="relative min-h-screen pt-32 pb-20 flex items-center overflow-hidden grid-bg">
+<div class="absolute inset-0 bg-radial-gradient from-primary/10 via-transparent to-transparent opacity-30 pointer-events-none"></div>
+<div class="max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-16 items-center relative z-10">
+<div class="reveal">
+<div class="inline-flex items-center gap-3 text-primary font-mono text-[10px] uppercase tracking-[0.3em] mb-6">
+<span class="w-12 h-px bg-primary/40"></span>
+            CDMX · Estado de México · Servicio a domicilio
+          </div>
+<h1 class="font-headline text-5xl md:text-7xl font-bold tracking-tighter leading-[0.95] mb-8">
+            La instalación se hace <span class="text-gradient">una vez</span>. <br/>Que quede bien.
+          </h1>
+<p class="text-on-surface-variant text-lg md:text-xl max-w-xl mb-10 leading-relaxed opacity-80">
+            Técnico electricista con 9 años de experiencia en instalaciones residenciales, comerciales e industriales. Desde un cambio de pastillas hasta tableros trifásicos.
+          </p>
+<div class="flex flex-wrap gap-4 mb-12">
+<a class="bg-primary text-white font-mono text-xs font-bold uppercase tracking-widest px-8 py-5 rounded-sm hover:bg-primary-bright hover:text-graphite transition-all btn-glow" href="https://wa.me/525658105587" target="_blank">
+              Cotizar por WhatsApp
+            </a>
+<a class="border border-white/10 glass text-on-surface font-mono text-xs font-bold uppercase tracking-widest px-8 py-5 rounded-sm hover:border-primary/50 transition-all" href="#servicios">
+              Ver servicios
+            </a>
+</div>
+<div class="flex gap-10 items-center border-t border-white/5 pt-10">
+<div>
+<div class="font-mono text-2xl font-bold text-primary">9+</div>
+<div class="text-[10px] uppercase tracking-widest opacity-50 mt-1">Años de experiencia</div>
+</div>
+<div class="w-px h-8 bg-white/10"></div>
+<div>
+<div class="font-mono text-2xl font-bold text-primary">100%</div>
+<div class="text-[10px] uppercase tracking-widest opacity-50 mt-1">Sin costo inicial</div>
+</div>
+</div>
+</div>
+<!-- CONTROL PANEL UI -->
+<div class="reveal delay-200">
+<div class="glass p-8 rounded-xl border border-white/10 shadow-2xl relative overflow-hidden group">
+<div class="flex items-center justify-between mb-8 border-b border-white/10 pb-4">
+<span class="font-mono text-[10px] tracking-widest opacity-40 uppercase">Panel — Centro de Carga v2.0</span>
+<div class="flex items-center gap-2 text-electric-green font-mono text-[10px] animate-pulse">
+<span class="w-2 h-2 rounded-full bg-electric-green glow-dot"></span>
+                SISTEMA ACTIVO
+              </div>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div class="bg-graphite-low border border-white/5 p-5 rounded-lg flex flex-col gap-4 group/switch cursor-pointer hover:border-primary/30 transition-colors">
+<div class="flex justify-between items-start">
+<span class="text-xs font-medium leading-tight opacity-80 uppercase tracking-tighter">Instalación<br/>Residencial</span>
+<div class="toggle-track bg-electric-green/40"><div class="toggle-thumb translate-x-[14px]"></div></div>
+</div>
+<span class="font-mono text-[9px] opacity-30">MOD-001 / LOAD: 85%</span>
+</div>
+<div class="bg-graphite-low border border-white/5 p-5 rounded-lg flex flex-col gap-4 hover:border-primary/30 transition-colors">
+<div class="flex justify-between items-start">
+<span class="text-xs font-medium leading-tight opacity-80 uppercase tracking-tighter">Mantenimiento<br/>Preventivo</span>
+<div class="toggle-track bg-electric-green/40"><div class="toggle-thumb translate-x-[14px]"></div></div>
+</div>
+<span class="font-mono text-[9px] opacity-30">MOD-002 / STATUS: OK</span>
+</div>
+<div class="bg-graphite-low border border-white/5 p-5 rounded-lg flex flex-col gap-4 hover:border-primary/30 transition-colors">
+<div class="flex justify-between items-start">
+<span class="text-xs font-medium leading-tight opacity-80 uppercase tracking-tighter">Reparación<br/>Urgente</span>
+<div class="toggle-track"><div class="toggle-thumb"></div></div>
+</div>
+<span class="font-mono text-[9px] opacity-30">MOD-003 / STANDBY</span>
+</div>
+<div class="bg-graphite-low border border-white/5 p-5 rounded-lg flex flex-col gap-4 hover:border-primary/30 transition-colors">
+<div class="flex justify-between items-start">
+<span class="text-xs font-medium leading-tight opacity-80 uppercase tracking-tighter">Proyectos<br/>Trifásicos</span>
+<div class="toggle-track bg-electric-green/40"><div class="toggle-thumb translate-x-[14px]"></div></div>
+</div>
+<span class="font-mono text-[9px] opacity-30">MOD-004 / LOAD: 0%</span>
+</div>
+</div>
+<div class="mt-8 pt-6 border-t border-white/10">
+<div class="flex items-center justify-between">
+<div class="flex gap-1">
+<div class="w-1 h-3 bg-primary/20 rounded-full"></div>
+<div class="w-1 h-3 bg-primary/40 rounded-full"></div>
+<div class="w-1 h-3 bg-primary/60 rounded-full"></div>
+<div class="w-1 h-3 bg-primary/80 rounded-full"></div>
+<div class="w-1 h-3 bg-primary rounded-full animate-pulse shadow-[0_0_8px_#2e5bff]"></div>
+</div>
+<span class="font-mono text-[10px] text-primary">COTIZANDO EN TIEMPO REAL...</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- SERVICES BENTO GRID -->
+<section class="py-32 bg-graphite relative" id="servicios">
+<div class="max-w-7xl mx-auto px-6">
+<div class="max-w-3xl mb-20 reveal">
+<div class="inline-flex items-center gap-3 text-primary font-mono text-[10px] uppercase tracking-[0.3em] mb-4">
+<span class="w-12 h-px bg-primary/40"></span>
+            Servicios Especializados
+          </div>
+<h2 class="font-headline text-4xl md:text-5xl font-bold mb-6">Ocho circuitos de trabajo, <br/>un solo estándar de calidad.</h2>
+<p class="text-on-surface-variant opacity-70">Precios de referencia — el costo final depende de materiales y condiciones del lugar. Cotización exacta sin costo por WhatsApp.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+<!-- Card 1 -->
+<div class="service-card reveal lg:col-span-2 glass p-8 rounded-xl flex flex-col justify-between hover:border-primary/40 transition-all cursor-default">
+<div>
+<div class="flex justify-between items-start mb-10">
+<div class="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-3xl">home</span>
+</div>
+<div class="toggle-track"><div class="toggle-thumb"></div></div>
+</div>
+<h3 class="font-headline text-2xl font-bold mb-4">Instalación eléctrica residencial</h3>
+<p class="text-sm text-on-surface-variant opacity-70 mb-6">Circuitos, contactos y apagadores en casa habitación. Incluye material y mano de obra.</p>
+</div>
+<div class="font-mono text-xs text-primary pt-6 border-t border-white/5">$3,000 – $8,000 / hab.</div>
+</div>
+<!-- Card 2 -->
+<div class="service-card reveal glass p-8 rounded-xl flex flex-col justify-between hover:border-primary/40 transition-all">
+<div>
+<div class="flex justify-between items-start mb-10">
+<div class="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-3xl">store</span>
+</div>
+<div class="toggle-track"><div class="toggle-thumb"></div></div>
+</div>
+<h3 class="font-headline text-xl font-bold mb-4">Comercial</h3>
+<p class="text-sm text-on-surface-variant opacity-70 mb-6">Negocios, oficinas y locales comerciales.</p>
+</div>
+<div class="font-mono text-xs text-primary pt-6 border-t border-white/5">Por proyecto</div>
+</div>
+<!-- Card 3 -->
+<div class="service-card reveal glass p-8 rounded-xl flex flex-col justify-between hover:border-primary/40 transition-all">
+<div>
+<div class="flex justify-between items-start mb-10">
+<div class="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-3xl">verified</span>
+</div>
+<div class="toggle-track"><div class="toggle-thumb"></div></div>
+</div>
+<h3 class="font-headline text-xl font-bold mb-4">Mantenimiento</h3>
+<p class="text-sm text-on-surface-variant opacity-70 mb-6">Revisión general y detección temprana.</p>
+</div>
+<div class="font-mono text-xs text-primary pt-6 border-t border-white/5">$1,500 – $3,500</div>
+</div>
+<!-- Card 4 -->
+<div class="service-card reveal glass p-8 rounded-xl flex flex-col justify-between hover:border-primary/40 transition-all">
+<div>
+<div class="flex justify-between items-start mb-10">
+<div class="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-3xl">bolt</span>
+</div>
+<div class="toggle-track"><div class="toggle-thumb"></div></div>
+</div>
+<h3 class="font-headline text-xl font-bold mb-4">Cortocircuitos</h3>
+<p class="text-sm text-on-surface-variant opacity-70 mb-6">Diagnóstico y reparación de fallas críticas.</p>
+</div>
+<div class="font-mono text-xs text-primary pt-6 border-t border-white/5">$400 – $1,200</div>
+</div>
+<!-- Card 5 -->
+<div class="service-card reveal lg:col-span-2 glass p-8 rounded-xl flex flex-col justify-between hover:border-primary/40 transition-all">
+<div class="flex gap-8">
+<div class="w-12 h-12 bg-primary/10 rounded-lg flex-shrink-0 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-3xl">electrical_services</span>
+</div>
+<div>
+<h3 class="font-headline text-2xl font-bold mb-4">Cambio de instalación antigua</h3>
+<p class="text-sm text-on-surface-variant opacity-70 mb-6">Renovación de instalaciones con más de 15-20 años o cableado en riesgo.</p>
+<div class="font-mono text-xs text-primary pt-6 border-t border-white/5">Desde $3,000 / hab.</div>
+</div>
+</div>
+</div>
+<!-- Card 6 -->
+<div class="service-card reveal glass p-8 rounded-xl flex flex-col justify-between hover:border-primary/40 transition-all">
+<div>
+<div class="flex justify-between items-start mb-10">
+<div class="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-3xl">settings_input_component</span>
+</div>
+<div class="toggle-track"><div class="toggle-thumb"></div></div>
+</div>
+<h3 class="font-headline text-xl font-bold mb-4">Tableros</h3>
+<p class="text-sm text-on-surface-variant opacity-70 mb-6">Instalación de centros de carga.</p>
+</div>
+<div class="font-mono text-xs text-primary pt-6 border-t border-white/5">$1,800 – $3,500</div>
+</div>
+</div>
+</div>
+</section>
+<!-- PROCESS -->
+<section class="py-32 bg-graphite-low border-y border-white/5" id="proceso">
+<div class="max-w-7xl mx-auto px-6">
+<div class="text-center mb-24 reveal">
+<h2 class="font-headline text-4xl font-bold">De tu mensaje al trabajo terminado</h2>
+</div>
+<div class="grid md:grid-cols-3 gap-12">
+<div class="reveal relative">
+<div class="text-[80px] font-headline font-bold text-white opacity-5 absolute -top-16 -left-4">01</div>
+<h3 class="font-headline text-xl font-bold mb-4 relative z-10">Escribes por WhatsApp</h3>
+<p class="text-on-surface-variant opacity-70 text-sm leading-relaxed">Cuéntame qué necesitas y en qué zona estás. Respondo directo, sin intermediarios.</p>
+</div>
+<div class="reveal relative delay-100">
+<div class="text-[80px] font-headline font-bold text-white opacity-5 absolute -top-16 -left-4">02</div>
+<h3 class="font-headline text-xl font-bold mb-4 relative z-10">Cotización sin costo</h3>
+<p class="text-on-surface-variant opacity-70 text-sm leading-relaxed">Te doy un diagnóstico inicial y un rango de precio antes de visitar el lugar.</p>
+</div>
+<div class="reveal relative delay-200">
+<div class="text-[80px] font-headline font-bold text-white opacity-5 absolute -top-16 -left-4">03</div>
+<h3 class="font-headline text-xl font-bold mb-4 relative z-10">Se hace el trabajo</h3>
+<p class="text-on-surface-variant opacity-70 text-sm leading-relaxed">Visito, confirmo el alcance final y realizo la instalación o reparación.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- PORTFOLIO -->
+<section class="py-32 bg-graphite" id="trabajos">
+<div class="max-w-7xl mx-auto px-6">
+<div class="flex flex-col md:flex-row md:items-end justify-between mb-16 reveal">
+<div class="max-w-2xl">
+<h2 class="font-headline text-4xl font-bold mb-4">Trabajos realizados</h2>
+<p class="text-on-surface-variant opacity-70">Resultados reales en residencias y comercios de la ciudad.</p>
+</div>
+<div class="mt-8 md:mt-0 font-mono text-[10px] uppercase tracking-widest text-primary">ACTUALIZADO: SEMANA ACTUAL</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-20">
+<div class="reveal group relative overflow-hidden rounded-xl aspect-[4/3] border border-white/10">
+<img alt="Panel Residencial" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCgMgdcqtt4RGrwBrOLd-0DN1PCTuMeTQpMIp1sm46ftJUwYzv8PTRjsLqKEH1IJkbcAGTTjcs3Ccsw1ves91mS6Nrrzg3F6dTgLWA1vGHy4WWG7eN2gX1B74f2yUnrlpvT7BWDOGGUAOgzBiXK5xmbZ2NPRapdSUb8__5ON4RxMUnhWg38ckSbjVRU8C0Y4te-iwQ-3YIMfJBDPDqRHV5FGwfkrFCIWchF81oMqumJPiKofVx7uKdCJw"/>
+<div class="absolute inset-0 bg-gradient-to-t from-graphite via-transparent to-transparent opacity-80"></div>
+<div class="absolute bottom-6 left-6 font-mono text-[10px] tracking-widest text-white uppercase">Centro de Carga — Residencial</div>
+</div>
+<div class="reveal group relative overflow-hidden rounded-xl aspect-[4/3] border border-white/10">
+<img alt="Tablero Comercial" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDlHcRuiI2qsdSg0B_kre_RYzbH1swLRkbQcUNAJKmmX-hbiGYgbwWdR54aW2UatJzaVuJ1Yur4koDOGmjeqQUFh_M7NNG8uoLYLttr9LiCe7i2o3dX5ZKEsgMMqBYoo1QZY7WYZUyDeVjUgZR3CzCx6yvE4NPovrA_SKrLApMTQodwGoIEOJYeudv1qZ0P5ycpCu9kARiT1b5Et-FIOxcDBQZp7bqTQVzNGkQfFDtTldPCEUUxOqmEnw"/>
+<div class="absolute inset-0 bg-gradient-to-t from-graphite via-transparent to-transparent opacity-80"></div>
+<div class="absolute bottom-6 left-6 font-mono text-[10px] tracking-widest text-white uppercase">Tablero Comercial — ABB</div>
+</div>
+<div class="reveal group relative overflow-hidden rounded-xl aspect-[4/3] border border-white/10">
+<img alt="Medidores CFE" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuATZ5FYcuV6XdsMjKEYgdr6TnVQwtfUNoO485_MU6c602o4DWbZG0Elo-BEk8RUg7RXOn2hLzSCtalv_9yRnEPIP_XX2TfmIoF_Bl2koMpSnqVyRQA-yaEtLPoVfhGvrdJaBieasp5vWWqyAFlCq17xNVUX4CNFg9VWjiQF671FkmItsl2AVJkRg87V9DsLLpqgZxziDT37u9CiJtUaTOk3O_mn4Q9om4XCHYX1buyNVeoGwF_L7FSb7g"/>
+<div class="absolute inset-0 bg-gradient-to-t from-graphite via-transparent to-transparent opacity-80"></div>
+<div class="absolute bottom-6 left-6 font-mono text-[10px] tracking-widest text-white uppercase">Medidores CFE — Multifamiliar</div>
+</div>
+</div>
+<div class="reveal glass p-10 rounded-2xl border-l-4 border-l-primary">
+<p class="font-headline text-2xl md:text-3xl font-medium mb-6 italic opacity-90">"Trabajos residenciales, comerciales e industriales — desde un cambio de pastillas hasta tableros trifásicos completos."</p>
+<div class="font-mono text-xs text-primary uppercase tracking-[0.2em]">9 AÑOS DE EXPERIENCIA EN CAMPO</div>
+</div>
+</div>
+</section>
+<!-- CONTACT & FORM -->
+<section class="py-32 bg-graphite-low relative overflow-hidden" id="contacto">
+<div class="absolute right-0 top-0 w-1/3 h-full grid-bg opacity-10 pointer-events-none"></div>
+<div class="max-w-7xl mx-auto px-6 relative z-10">
+<div class="grid lg:grid-cols-2 gap-20">
+<div class="reveal">
+<h2 class="font-headline text-4xl font-bold mb-8">Hablemos de tu proyecto</h2>
+<p class="text-on-surface-variant opacity-70 mb-12 max-w-md">Respuesta inmediata por WhatsApp. Atiendo emergencias y proyectos programados.</p>
+<div class="space-y-8">
+<div class="flex items-center gap-6">
+<div class="w-12 h-12 bg-white/5 flex items-center justify-center rounded-lg text-primary">
+<span class="material-symbols-outlined">call</span>
+</div>
+<div>
+<div class="font-mono text-[10px] uppercase tracking-widest opacity-40">WhatsApp Directo</div>
+<a class="text-xl font-bold hover:text-primary transition-colors" href="https://wa.me/525658105587" target="_blank">56 3334 3176</a>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="w-12 h-12 bg-white/5 flex items-center justify-center rounded-lg text-primary">
+<span class="material-symbols-outlined">schedule</span>
+</div>
+<div>
+<div class="font-mono text-[10px] uppercase tracking-widest opacity-40">Horario de Atención</div>
+<div class="text-xl font-bold">Lun – Sáb, 8:00 – 20:00</div>
+</div>
+</div>
+</div>
+</div>
+<div class="reveal delay-200">
+<div class="glass p-8 md:p-10 rounded-2xl border border-white/10">
+<form class="space-y-6" id="quote-form">
+<div class="grid md:grid-cols-2 gap-6">
+<div class="space-y-2">
+<label class="font-mono text-[10px] uppercase tracking-widest opacity-50" for="nombre">Nombre</label>
+<input class="w-full bg-white/5 border-white/10 rounded-sm focus:border-primary focus:ring-1 focus:ring-primary text-sm p-4 outline-none transition-all" id="nombre" name="nombre" required="" type="text"/>
+</div>
+<div class="space-y-2">
+<label class="font-mono text-[10px] uppercase tracking-widest opacity-50" for="telefono">Teléfono</label>
+<input class="w-full bg-white/5 border-white/10 rounded-sm focus:border-primary focus:ring-1 focus:ring-primary text-sm p-4 outline-none transition-all" id="telefono" name="telefono" required="" type="tel"/>
+</div>
+</div>
+<div class="space-y-2">
+<label class="font-mono text-[10px] uppercase tracking-widest opacity-50" for="servicio">Tipo de servicio</label>
+<select class="w-full bg-white/5 border-white/10 rounded-sm focus:border-primary focus:ring-1 focus:ring-primary text-sm p-4 outline-none transition-all" id="servicio" name="servicio" required="">
+<option class="bg-graphite" value="">Selecciona una opción</option>
+<option class="bg-graphite" value="Instalación residencial">Instalación residencial</option>
+<option class="bg-graphite" value="Instalación comercial">Instalación comercial</option>
+<option class="bg-graphite" value="Mantenimiento preventivo">Mantenimiento preventivo</option>
+<option class="bg-graphite" value="Reparación de fallas">Reparación de fallas</option>
+<option class="bg-graphite" value="Cambio de instalación antigua">Cambio de instalación antigua</option>
+<option class="bg-graphite" value="Centro de carga / pastillas">Centro de carga / pastillas</option>
+<option class="bg-graphite" value="Luminarias LED">Luminarias LED</option>
+<option class="bg-graphite" value="Otro">Otro</option>
+</select>
+</div>
+<div class="space-y-3">
+<label class="font-mono text-[10px] uppercase tracking-widest opacity-50">¿Es una emergencia?</label>
+<div class="grid grid-cols-2 gap-4">
+<label class="cursor-pointer group">
+<input class="hidden peer" name="urgencia" type="radio" value="si"/>
+<div class="p-4 text-center text-xs font-bold border border-white/10 rounded-sm peer-checked:border-red-500/50 peer-checked:bg-red-500/10 transition-all">SÍ, URGENTE</div>
+</label>
+<label class="cursor-pointer group">
+<input checked="" class="hidden peer" name="urgencia" type="radio" value="no"/>
+<div class="p-4 text-center text-xs font-bold border border-white/10 rounded-sm peer-checked:border-primary/50 peer-checked:bg-primary/10 transition-all">PUEDE ESPERAR</div>
+</label>
+</div>
+</div>
+<div class="space-y-2">
+<label class="font-mono text-[10px] uppercase tracking-widest opacity-50" for="descripcion">Descripción del problema</label>
+<textarea class="w-full bg-white/5 border-white/10 rounded-sm focus:border-primary focus:ring-1 focus:ring-primary text-sm p-4 outline-none transition-all" id="descripcion" name="descripcion" placeholder="Ej. Se fue la luz en dos cuartos desde ayer..." rows="3"></textarea>
+</div>
+<button class="w-full bg-primary text-white font-mono text-xs font-bold uppercase tracking-widest py-5 rounded-sm hover:bg-primary-bright hover:text-graphite transition-all btn-glow" type="submit">
+                  Enviar por WhatsApp
+                </button>
+</form>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+
+<section id="privacidad" class="py-20 bg-graphite-low border-t border-white/5">
+<div class="max-w-4xl mx-auto px-6">
+<h2 class="font-headline text-3xl font-bold mb-6">Política de Privacidad</h2>
+<p class="text-sm opacity-70 leading-relaxed mb-4">Instalaciones Eléctricas J-G, a cargo de Jorge Martinez. Contacto: instelecjg@gmail.com, WhatsApp 56 5810 5587. Recopilamos nombre, teléfono y descripción del servicio únicamente para generar cotizaciones y agendar citas. No compartimos datos con terceros. Almacenamos la información en Supabase de forma segura.</p>
+<p class="text-sm opacity-70 leading-relaxed mb-4">Puedes solicitar la eliminación de tus datos escribiendo a instelecjg@gmail.com. Uso de WhatsApp Business API bajo las políticas de Meta.</p>
+<p class="text-sm opacity-70 leading-relaxed">Última actualización: Mayo 2026. Cobertura: CDMX y Estado de México.</p>
+</div>
+</section>
+<section id="terminos" class="py-20 bg-graphite border-t border-white/5">
+<div class="max-w-4xl mx-auto px-6">
+<h2 class="font-headline text-3xl font-bold mb-6">Términos y Condiciones</h2>
+<p class="text-sm opacity-70 leading-relaxed">Las cotizaciones son gratuitas y sin compromiso. Los precios pueden variar según visita técnica. Servicio garantizado.</p>
+</div>
+</section>
+
+<footer class="py-12 bg-graphite border-t border-white/5">
+<div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-8">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 border-2 border-primary/50 flex items-center justify-center rounded-sm">
+<div class="w-1 h-3 bg-primary shadow-[0_0_5px_#2e5bff]"></div>
+</div>
+<span class="font-headline font-bold text-sm tracking-tight">Instalaciones Eléctricas J-G</span>
+</div>
+<div class="font-mono text-[10px] opacity-40 uppercase tracking-widest">
+        © 2026 — Ciudad de México / Estado de México
+      </div>
+<div class="flex flex-col gap-2 text-right">
+<div class="flex gap-6">
+<a class="text-[10px] uppercase tracking-widest opacity-50 hover:opacity-100 hover:text-primary transition-all" href="#servicios">Servicios</a>
+<a class="text-[10px] uppercase tracking-widest opacity-50 hover:opacity-100 hover:text-primary transition-all" href="#privacidad">Privacidad</a>
+<a class="text-[10px] uppercase tracking-widest opacity-50 hover:opacity-100 hover:text-primary transition-all" href="#terminos">Términos</a>
+<a class="text-[10px] uppercase tracking-widest opacity-50 hover:opacity-100 hover:text-primary transition-all" href="#contacto">Contacto</a>
+</div>
+<div class="font-mono text-[10px] opacity-50">instelecjg@gmail.com · WhatsApp 56 5810 5587 · Jorge Martinez</div>
+</div>
+</div>
+</footer>
+<!-- STICKY WHATSAPP WITH GLOW -->
+<a class="fixed bottom-8 right-8 z-[100] group flex items-center gap-4" href="https://wa.me/525658105587" target="_blank">
+<div class="hidden sm:block glass px-4 py-2 rounded-full text-[10px] font-mono font-bold uppercase tracking-widest border border-primary/20 opacity-0 group-hover:opacity-100 transition-all translate-x-4 group-hover:translate-x-0">
+      Cotizar Ahora
+    </div>
+<div class="w-16 h-16 bg-electric-green rounded-full flex items-center justify-center text-graphite shadow-[0_0_25px_rgba(0,238,252,0.5)] animate-pulse-slow hover:scale-110 transition-transform">
+<svg fill="currentColor" height="24" viewbox="0 0 24 24" width="24"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38a9.9 9.9 0 0 0 4.74 1.21h.01c5.46 0 9.9-4.45 9.9-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2zm5.8 14.14c-.24.68-1.4 1.3-1.93 1.38-.5.08-1.12.11-1.81-.11a16.6 16.6 0 0 1-1.65-.61c-2.9-1.25-4.79-4.17-4.93-4.36-.14-.19-1.18-1.57-1.18-3 0-1.42.75-2.12 1.01-2.41.27-.29.58-.36.78-.36.19 0 .39 0 .55.01.18.01.42-.07.65.5.24.58.82 2 .89 2.15.07.15.12.32.02.51-.1.19-.15.31-.29.48-.15.17-.31.38-.44.51-.15.15-.3.31-.13.6.17.29.76 1.25 1.63 2.02 1.12 1 2.06 1.31 2.35 1.46.29.15.46.13.63-.08.17-.21.72-.84.91-1.13.19-.29.38-.24.63-.14.26.1 1.65.78 1.93.92.29.14.48.21.55.33.07.12.07.68-.17 1.36z"></path></svg>
+</div>
+</a>
+<script>
+    // Scroll Reveal Intersection Observer
+    const observerOptions = {
+      root: null,
+      rootMargin: '0px',
+      threshold: 0.1
+    };
+
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('active');
+        }
+      });
+    }, observerOptions);
+
+    document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+    // WhatsApp Form Logic
+    document.getElementById('quote-form').addEventListener('submit', function(e){
+      e.preventDefault();
+      var nombre = document.getElementById('nombre').value;
+      var telefono = document.getElementById('telefono').value;
+      var servicio = document.getElementById('servicio').value;
+      var urgencia = document.querySelector('input[name="urgencia"]:checked').value === 'si' ? 'SÍ, es urgente' : 'No es urgente';
+      var descripcion = document.getElementById('descripcion').value;
+
+      var msg = "Hola, quiero una cotización.%0A" +
+        "Nombre: " + encodeURIComponent(nombre) + "%0A" +
+        "Teléfono: " + encodeURIComponent(telefono) + "%0A" +
+        "Servicio: " + encodeURIComponent(servicio) + "%0A" +
+        "¿Urgente?: " + encodeURIComponent(urgencia) + "%0A" +
+        "Descripción: " + encodeURIComponent(descripcion);
+
+      window.open("https://wa.me/525658105587?text=" + msg, "_blank");
+    });
+
+    // Smooth scroll for anchors
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        document.querySelector(this.getAttribute('href')).scrollIntoView({
+          behavior: 'smooth'
+        });
+      });
+    });
+  </script>
+</body></html>
