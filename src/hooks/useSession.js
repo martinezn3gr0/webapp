@@ -1,12 +1,21 @@
 import { useEffect, useState } from 'react';
-import { supabase } from '../supabaseClient';
+import { supabase, supabaseConfigured } from '../supabaseClient';
 
 export function useSession() {
   const [session, setSession] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(
+    supabaseConfigured ? null : 'La app no está configurada correctamente (faltan credenciales de Supabase).'
+  );
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data }) => {
+    if (!supabaseConfigured) {
+      setLoading(false);
+      return;
+    }
+
+    supabase.auth.getSession().then(({ data, error: sessionError }) => {
+      if (sessionError) setError(sessionError.message);
       setSession(data.session);
       setLoading(false);
     });
@@ -18,5 +27,5 @@ export function useSession() {
     return () => listener.subscription.unsubscribe();
   }, []);
 
-  return { session, loading };
+  return { session, loading, error };
 }

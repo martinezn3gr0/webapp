@@ -5,9 +5,10 @@ import QuoteSummary from './QuoteSummary';
 import './ChatWindow.css';
 
 export default function ChatWindow({ contacto }) {
-  const { mensajes, loading } = useMensajes(contacto?.id);
+  const { mensajes, loading, error } = useMensajes(contacto?.id);
   const [texto, setTexto] = useState('');
   const [enviando, setEnviando] = useState(false);
+  const [envioError, setEnvioError] = useState('');
   const bottomRef = useRef(null);
 
   useEffect(() => {
@@ -19,13 +20,14 @@ export default function ChatWindow({ contacto }) {
     if (!texto.trim() || enviando) return;
 
     setEnviando(true);
-    const { error } = await supabase.functions.invoke('send-message', {
+    setEnvioError('');
+    const { error: sendError } = await supabase.functions.invoke('send-message', {
       body: { contacto_id: contacto.id, contenido: texto.trim() },
     });
     setEnviando(false);
 
-    if (error) {
-      alert('No se pudo enviar el mensaje. Intenta de nuevo.');
+    if (sendError) {
+      setEnvioError('No se pudo enviar el mensaje. Intenta de nuevo.');
       return;
     }
     setTexto('');
@@ -51,6 +53,7 @@ export default function ChatWindow({ contacto }) {
       <QuoteSummary contactoId={contacto.id} />
 
       <div className="chat-window__messages">
+        {error && <p className="chat-window__error">No se pudieron cargar los mensajes: {error}</p>}
         {loading && <p className="chat-window__loading">Cargando mensajes…</p>}
         {mensajes.map((m) => (
           <div key={m.id} className={`bubble bubble--${m.sender}`}>
@@ -65,6 +68,8 @@ export default function ChatWindow({ contacto }) {
         ))}
         <div ref={bottomRef} />
       </div>
+
+      {envioError && <p className="chat-window__error">{envioError}</p>}
 
       <form className="chat-window__input" onSubmit={handleEnviar}>
         <input

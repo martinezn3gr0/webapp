@@ -4,10 +4,12 @@ import './QuoteSummary.css';
 
 export default function QuoteSummary({ contactoId }) {
   const [cotizacion, setCotizacion] = useState(null);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     if (!contactoId) return;
     let active = true;
+    setError(null);
 
     supabase
       .from('cotizaciones')
@@ -16,14 +18,20 @@ export default function QuoteSummary({ contactoId }) {
       .order('created_at', { ascending: false })
       .limit(1)
       .maybeSingle()
-      .then(({ data }) => {
-        if (active) setCotizacion(data);
+      .then(({ data, error: fetchError }) => {
+        if (!active) return;
+        if (fetchError) setError(fetchError.message);
+        else setCotizacion(data);
       });
 
     return () => {
       active = false;
     };
   }, [contactoId]);
+
+  if (error) {
+    return <p className="quote-summary__error">No se pudo cargar la cotización: {error}</p>;
+  }
 
   if (!cotizacion) return null;
 

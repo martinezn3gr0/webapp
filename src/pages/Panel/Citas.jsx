@@ -9,7 +9,14 @@ const ESTADOS = {
 };
 
 export default function Citas() {
-  const { citas, loading, actualizarEstado } = useCitas();
+  const { citas, loading, error, actualizarEstado } = useCitas();
+
+  async function handleActualizarEstado(citaId, estado) {
+    const ok = await actualizarEstado(citaId, estado);
+    if (!ok) {
+      alert('No se pudo actualizar la cita. Intenta de nuevo.');
+    }
+  }
 
   return (
     <div className="citas-page">
@@ -17,6 +24,7 @@ export default function Citas() {
         <h1>Citas agendadas</h1>
       </div>
 
+      {error && <p className="citas-page__error">No se pudieron cargar las citas: {error}</p>}
       {loading && <p className="citas-page__loading">Cargando…</p>}
 
       <div className="citas-list">
@@ -54,13 +62,13 @@ export default function Citas() {
                   <>
                     <button
                       className="cita-card__btn cita-card__btn--confirm"
-                      onClick={() => actualizarEstado(cita.id, 'confirmada')}
+                      onClick={() => handleActualizarEstado(cita.id, 'confirmada')}
                     >
                       Confirmar
                     </button>
                     <button
                       className="cita-card__btn cita-card__btn--cancel"
-                      onClick={() => actualizarEstado(cita.id, 'cancelada')}
+                      onClick={() => handleActualizarEstado(cita.id, 'cancelada')}
                     >
                       Cancelar
                     </button>
@@ -69,7 +77,7 @@ export default function Citas() {
                 {cita.estado === 'confirmada' && (
                   <button
                     className="cita-card__btn"
-                    onClick={() => actualizarEstado(cita.id, 'completada')}
+                    onClick={() => handleActualizarEstado(cita.id, 'completada')}
                   >
                     Marcar completada
                   </button>

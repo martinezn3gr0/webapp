@@ -28,7 +28,7 @@ crea tu correo y contraseña. Con eso entras en `/login`.
 
 | Ruta | Acceso | Qué hace |
 |---|---|---|
-| `/` | Público | Landing (portafolio — pendiente) |
+| `/` | Público | Landing del negocio (portafolio + formulario de cotización por WhatsApp) |
 | `/login` | Público | Acceso del agente |
 | `/panel/chats` | Protegido | Lista de conversaciones + responder |
 | `/panel/citas` | Protegido | Confirmar / cancelar citas agendadas |
@@ -54,3 +54,30 @@ seguridad, el token de WhatsApp nunca toca el cliente). Cuando escribes y das
 3. Lo guarda en la tabla `mensajes`.
 
 Esa función ya está desplegada en tu proyecto de Supabase.
+
+## 6. Bot de WhatsApp (Meta)
+
+El código de las dos Edge Functions vive versionado en `supabase/functions/`:
+
+- **`whatsapp-webhook`** — recibe los mensajes entrantes de la API de Meta,
+  verifica la firma (`x-hub-signature-256`) y hace las 3 preguntas iniciales
+  del bot antes de pasar la conversación a `estado_bot: humano`.
+- **`send-message`** — usada por el panel para responder (ver punto 5).
+
+Secrets que deben existir en Supabase (Project Settings → Edge Functions →
+Secrets) antes de conectar Meta:
+
+| Secret | Uso |
+|---|---|
+| `WHATSAPP_TOKEN` | Token de acceso de la app de Meta para mandar mensajes |
+| `WHATSAPP_PHONE_NUMBER_ID` | ID del número de WhatsApp Business |
+| `META_APP_SECRET` | App Secret de Meta, para verificar la firma del webhook |
+| `META_VERIFY_TOKEN` | El mismo valor que pongas como "Verify Token" al configurar el webhook en Meta |
+| `PANEL_ORIGIN` | Origen permitido por CORS para `send-message` (URL de este panel en Vercel) |
+
+`SUPABASE_URL` y `SUPABASE_SERVICE_ROLE_KEY` ya los inyecta Supabase
+automáticamente en cada función.
+
+Al configurar el webhook en el App Dashboard de Meta, la URL de callback es
+la de la función `whatsapp-webhook` y el "Verify Token" debe ser exactamente
+el mismo valor que guardes en el secret `META_VERIFY_TOKEN`.

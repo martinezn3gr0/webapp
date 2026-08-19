@@ -63,3 +63,11 @@
   font-weight: 600;
   color: var(--ink);
 }
+
+.quote-summary__error {
+  background: var(--red-alert);
+  color: white;
+  font-size: 12px;
+  margin: 0;
+  padding: var(--space-2) var(--space-4);
+}

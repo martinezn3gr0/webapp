@@ -6,15 +6,19 @@ import { supabase } from '../supabaseClient';
 export function useContactos() {
   const [contactos, setContactos] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   const fetchContactos = useCallback(async () => {
-    const { data, error } = await supabase
+    const { data, error: fetchError } = await supabase
       .from('contactos')
       .select('*, mensajes(contenido, created_at, sender)')
       .order('updated_at', { ascending: false });
 
-    if (!error && data) {
-      setContactos(data);
+    if (fetchError) {
+      setError(fetchError.message);
+    } else {
+      setError(null);
+      setContactos(data ?? []);
     }
     setLoading(false);
   }, []);
@@ -41,5 +45,5 @@ export function useContactos() {
     };
   }, [fetchContactos]);
 
-  return { contactos, loading, refetch: fetchContactos };
+  return { contactos, loading, error, refetch: fetchContactos };
 }

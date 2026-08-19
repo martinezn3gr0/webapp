@@ -4,16 +4,22 @@ import { supabase } from '../supabaseClient';
 export function useMensajes(contactoId) {
   const [mensajes, setMensajes] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   const fetchMensajes = useCallback(async () => {
     if (!contactoId) return;
-    const { data, error } = await supabase
+    const { data, error: fetchError } = await supabase
       .from('mensajes')
       .select('*')
       .eq('contacto_id', contactoId)
       .order('created_at', { ascending: true });
 
-    if (!error && data) setMensajes(data);
+    if (fetchError) {
+      setError(fetchError.message);
+    } else {
+      setError(null);
+      setMensajes(data ?? []);
+    }
     setLoading(false);
   }, [contactoId]);
 
@@ -43,5 +49,5 @@ export function useMensajes(contactoId) {
     };
   }, [contactoId, fetchMensajes]);
 
-  return { mensajes, loading };
+  return { mensajes, loading, error };
 }

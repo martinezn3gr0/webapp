@@ -18,6 +18,14 @@
   padding: var(--space-5);
 }
 
+.citas-page__error {
+  color: white;
+  background: var(--red-alert);
+  border-radius: var(--radius-sm);
+  padding: var(--space-3) var(--space-4);
+  margin-bottom: var(--space-4);
+}
+
 .citas-list {
   display: flex;
   flex-direction: column;

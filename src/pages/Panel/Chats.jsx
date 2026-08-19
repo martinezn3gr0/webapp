@@ -5,7 +5,7 @@ import ChatWindow from '../../components/ChatWindow';
 import './Chats.css';
 
 export default function Chats() {
-  const { contactos, loading } = useContactos();
+  const { contactos, loading, error } = useContactos();
   const [selectedId, setSelectedId] = useState(null);
 
   const selectedContacto = useMemo(
@@ -19,7 +19,11 @@ export default function Chats() {
   return (
     <div className="chats-page">
       <div className={`chats-page__list ${showList ? '' : 'chats-page__list--hidden-mobile'}`}>
-        {loading ? (
+        {error ? (
+          <p style={{ padding: 16, color: 'var(--red-alert)' }}>
+            No se pudieron cargar los chats: {error}
+          </p>
+        ) : loading ? (
           <p style={{ padding: 16, color: 'var(--ink-soft)' }}>Cargando…</p>
         ) : (
           <ChatList contactos={contactos} selectedId={selectedId} onSelect={setSelectedId} />

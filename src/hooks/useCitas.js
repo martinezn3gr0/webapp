@@ -4,14 +4,20 @@ import { supabase } from '../supabaseClient';
 export function useCitas() {
   const [citas, setCitas] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   const fetchCitas = useCallback(async () => {
-    const { data, error } = await supabase
+    const { data, error: fetchError } = await supabase
       .from('citas')
       .select('*, contactos(nombre, phone_number)')
       .order('fecha_hora', { ascending: true });
 
-    if (!error && data) setCitas(data);
+    if (fetchError) {
+      setError(fetchError.message);
+    } else {
+      setError(null);
+      setCitas(data ?? []);
+    }
     setLoading(false);
   }, []);
 
@@ -27,8 +33,13 @@ export function useCitas() {
   }, [fetchCitas]);
 
   async function actualizarEstado(citaId, estado) {
-    await supabase.from('citas').update({ estado }).eq('id', citaId);
+    const { error: updateError } = await supabase.from('citas').update({ estado }).eq('id', citaId);
+    if (updateError) {
+      setError(updateError.message);
+      return false;
+    }
+    return true;
   }
 
-  return { citas, loading, actualizarEstado };
+  return { citas, loading, error, actualizarEstado };
 }
