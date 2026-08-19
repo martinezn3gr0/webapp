@@ -592,17 +592,24 @@
 }
 
 .landing-portfolio__item {
+  position: relative;
   aspect-ratio: 4 / 3;
   border-radius: 14px;
   border: 1px solid var(--l-line);
   background: var(--l-graphite-low);
+  overflow: hidden;
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  text-align: center;
-  padding: 16px;
+  align-items: flex-end;
+  justify-content: flex-start;
+}
+
+.landing-portfolio__item-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
 }
 
 .landing-portfolio__item-icon {
@@ -610,11 +617,16 @@
 }
 
 .landing-portfolio__item-label {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  padding: 10px 12px;
   font-family: 'IBM Plex Mono', monospace;
   font-size: 10px;
   text-transform: uppercase;
   letter-spacing: 0.1em;
-  color: var(--l-ink-faint);
+  color: #fff;
+  background: linear-gradient(to top, rgba(10, 10, 12, 0.88), rgba(10, 10, 12, 0));
 }
 
 .landing-portfolio__quote {

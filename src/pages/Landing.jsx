@@ -71,9 +71,31 @@ const PROCESO = [
 ];
 
 const TRABAJOS = [
-  'Centro de carga — Residencial',
-  'Tablero comercial — ABB',
-  'Medidores CFE — Multifamiliar',
+  {
+    src: '/portfolio/tableros-cableado-organizado.jpg',
+    label: 'Tableros trifásicos — Cableado',
+    alt: 'Dos tableros eléctricos abiertos con cableado organizado y codificado por colores',
+  },
+  {
+    src: '/portfolio/tablero-medidor-interior.jpg',
+    label: 'Tablero y medidor — Interior',
+    alt: 'Instalación interior de medidor eléctrico y centro de carga con circuitos etiquetados',
+  },
+  {
+    src: '/portfolio/tablero-medidor-empotrado.jpg',
+    label: 'Medidor empotrado — Residencial',
+    alt: 'Medidor eléctrico empotrado en muro con conexiones y cableado limpio',
+  },
+  {
+    src: '/portfolio/tablero-electrico-exterior.jpg',
+    label: 'Centro de carga — Exterior',
+    alt: 'Centro de carga eléctrico instalado en muro exterior de concreto',
+  },
+  {
+    src: '/portfolio/medidores-electricos-fachada.jpg',
+    label: 'Medidores CFE — Multifamiliar',
+    alt: 'Tres medidores eléctricos instalados en fachada de edificio multifamiliar',
+  },
 ];
 
 function Icon({ name, size = 24 }) {
@@ -409,10 +431,15 @@ export default function Landing() {
             <span className="landing-portfolio__updated">Actualizado: semana actual</span>
           </div>
           <div className="landing-portfolio__grid">
-            {TRABAJOS.map((label) => (
-              <Reveal className="landing-portfolio__item" key={label}>
-                <Icon name="photo" size={32} />
-                <span className="landing-portfolio__item-label">{label}</span>
+            {TRABAJOS.map((trabajo) => (
+              <Reveal className="landing-portfolio__item" key={trabajo.src}>
+                <img
+                  className="landing-portfolio__item-img"
+                  src={trabajo.src}
+                  alt={trabajo.alt}
+                  loading="lazy"
+                />
+                <span className="landing-portfolio__item-label">{trabajo.label}</span>
               </Reveal>
             ))}
           </div>
