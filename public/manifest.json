@@ -1,7 +1,7 @@
 {
-  "name": "Panel de Cotizaciones",
-  "short_name": "Cotizaciones",
-  "description": "Gestiona tus leads de WhatsApp y responde en tiempo real",
+  "name": "InstelecJG",
+  "short_name": "InstelecJG",
+  "description": "Instalaciones Eléctricas J-G — cotiza por WhatsApp y agenda tu servicio",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#202B3A",
