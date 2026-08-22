@@ -12,7 +12,10 @@ export default function PanelLayout() {
       <header className="panel-header">
         <div className="panel-header__brand">
           <span className="panel-header__stub" />
-          PANEL
+          <div className="panel-header__brand-text">
+            <span className="panel-header__title">PANEL</span>
+            <span className="panel-header__subtitle">Instalaciones Eléctricas J-G</span>
+          </div>
         </div>
 
         <nav className="panel-nav">

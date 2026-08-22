@@ -1,4 +1,5 @@
 import EstadoBadge from './EstadoBadge';
+import EmptyState from './EmptyState';
 import './ChatList.css';
 
 function ultimoMensaje(contacto) {
@@ -36,7 +37,11 @@ export default function ChatList({ contactos, selectedId, onSelect }) {
         ))}
 
         {contactos.length === 0 && (
-          <p className="chat-list__empty">Todavía no hay conversaciones.</p>
+          <EmptyState
+            icon="chat"
+            title="Todavía no hay conversaciones"
+            subtitle="Cuando un cliente escriba por WhatsApp, aparece aquí."
+          />
         )}
       </div>
     </div>

@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { supabase } from '../supabaseClient';
 import { useMensajes } from '../hooks/useMensajes';
 import QuoteSummary from './QuoteSummary';
+import EmptyState from './EmptyState';
 import './ChatWindow.css';
 
 export default function ChatWindow({ contacto }) {
@@ -36,7 +37,7 @@ export default function ChatWindow({ contacto }) {
   if (!contacto) {
     return (
       <div className="chat-window chat-window--empty">
-        <p>Selecciona una conversación de la lista.</p>
+        <EmptyState icon="select" title="Selecciona una conversación" subtitle="Elige un chat de la lista para ver los mensajes." />
       </div>
     );
   }

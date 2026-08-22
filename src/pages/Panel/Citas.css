@@ -105,6 +105,19 @@
   margin-top: var(--space-2);
 }
 
+@media (max-width: 480px) {
+  .cita-card {
+    grid-template-columns: 56px 1fr;
+  }
+
+  .cita-card__estado {
+    grid-column: 2;
+    grid-row: 2;
+    justify-self: start;
+    margin-top: 4px;
+  }
+}
+
 .cita-card__btn {
   font-size: 12px;
   font-weight: 700;

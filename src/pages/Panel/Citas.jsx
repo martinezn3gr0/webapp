@@ -1,4 +1,5 @@
 import { useCitas } from '../../hooks/useCitas';
+import EmptyState from '../../components/EmptyState';
 import './Citas.css';
 
 const ESTADOS = {
@@ -88,7 +89,11 @@ export default function Citas() {
         })}
 
         {!loading && citas.length === 0 && (
-          <p className="citas-page__empty">No hay citas agendadas todavía.</p>
+          <EmptyState
+            icon="calendar"
+            title="No hay citas agendadas todavía"
+            subtitle="Las citas que confirmes con tus clientes aparecen aquí."
+          />
         )}
       </div>
     </div>

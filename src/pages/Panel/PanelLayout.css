@@ -11,18 +11,34 @@
   background: var(--navy-deep);
   color: white;
   padding: 0 var(--space-4);
-  height: 56px;
+  height: 60px;
   flex-shrink: 0;
+  border-bottom: 2px solid var(--amber-signal);
 }
 
 .panel-header__brand {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
+}
+
+.panel-header__brand-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+
+.panel-header__title {
   font-family: var(--font-display);
   font-weight: 700;
   letter-spacing: 0.08em;
   font-size: 13px;
+}
+
+.panel-header__subtitle {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.5);
+  white-space: nowrap;
 }
 
 .panel-header__stub {
@@ -30,6 +46,13 @@
   height: 10px;
   border-radius: 50%;
   background: var(--amber-signal);
+  flex-shrink: 0;
+}
+
+@media (max-width: 560px) {
+  .panel-header__subtitle {
+    display: none;
+  }
 }
 
 .panel-nav {
