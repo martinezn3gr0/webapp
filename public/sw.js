@@ -1,4 +1,4 @@
-const CACHE_NAME = 'cotizaciones-shell-v1';
+const CACHE_NAME = 'cotizaciones-shell-v2';
 const SHELL_ASSETS = ['/', '/manifest.json', '/icons/icon-192.png', '/icons/icon-512.png'];
 
 self.addEventListener('install', (event) => {
@@ -17,8 +17,10 @@ self.addEventListener('activate', (event) => {
   self.clients.claim();
 });
 
-// Network-first para todo lo que no sea el shell estático.
-// Los datos (mensajes, cotizaciones) siempre deben venir frescos de Supabase.
+// Network-first para el shell: siempre intenta traer la versión más
+// reciente del sitio; solo usa el caché si no hay conexión. Evita que un
+// usuario quede atorado en una versión vieja del build (con nombres de
+// archivo hasheados que ya no existen) después de un nuevo deploy.
 self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET') return;
 
@@ -27,7 +29,13 @@ self.addEventListener('fetch', (event) => {
 
   if (isShellAsset) {
     event.respondWith(
-      caches.match(event.request).then((cached) => cached || fetch(event.request))
+      fetch(event.request)
+        .then((response) => {
+          const clone = response.clone();
+          caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone));
+          return response;
+        })
+        .catch(() => caches.match(event.request))
     );
   }
 });
