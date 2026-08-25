@@ -620,8 +620,8 @@ export default function Landing() {
           <div className="landing-footer__links">
             <div className="landing-footer__links-row">
               <a href="#servicios">Servicios</a>
-              <a href="#privacidad">Privacidad</a>
-              <a href="#terminos">Términos</a>
+              <a href="/privacidad.html">Privacidad</a>
+              <a href="/terminos.html">Términos</a>
               <a href="#contacto">Contacto</a>
             </div>
             <div className="landing-footer__meta">
