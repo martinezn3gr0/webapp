@@ -926,6 +926,24 @@ a.landing-contact__value:hover {
   opacity: 0.5;
 }
 
+.landing-footer__social {
+  display: flex;
+  gap: 14px;
+}
+
+.landing-footer__social a {
+  color: currentColor;
+  opacity: 0.6;
+  display: grid;
+  place-items: center;
+  transition: opacity 0.2s ease, color 0.2s ease;
+}
+
+.landing-footer__social a:hover {
+  opacity: 1;
+  color: var(--l-primary);
+}
+
 /* Sticky WhatsApp */
 .landing-sticky-wa {
   position: fixed;

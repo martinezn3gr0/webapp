@@ -3,6 +3,8 @@ import './Landing.css';
 
 const WHATSAPP_NUMBER = '525658105587';
 const WHATSAPP_DISPLAY = '56 5810 5587';
+const INSTAGRAM_URL = 'https://instagram.com/instelecjg';
+const FACEBOOK_URL = 'https://facebook.com/instelecjg';
 
 const NAV_LINKS = [
   { href: '#servicios', label: 'Servicios' },
@@ -180,6 +182,20 @@ function Icon({ name, size = 24 }) {
       return (
         <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor">
           <path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38a9.9 9.9 0 0 0 4.74 1.21h.01c5.46 0 9.9-4.45 9.9-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2zm5.8 14.14c-.24.68-1.4 1.3-1.93 1.38-.5.08-1.12.11-1.81-.11a16.6 16.6 0 0 1-1.65-.61c-2.9-1.25-4.79-4.17-4.93-4.36-.14-.19-1.18-1.57-1.18-3 0-1.42.75-2.12 1.01-2.41.27-.29.58-.36.78-.36.19 0 .39 0 .55.01.18.01.42-.07.65.5.24.58.82 2 .89 2.15.07.15.12.32.02.51-.1.19-.15.31-.29.48-.15.17-.31.38-.44.51-.15.15-.3.31-.13.6.17.29.76 1.25 1.63 2.02 1.12 1 2.06 1.31 2.35 1.46.29.15.46.13.63-.08.17-.21.72-.84.91-1.13.19-.29.38-.24.63-.14.26.1 1.65.78 1.93.92.29.14.48.21.55.33.07.12.07.68-.17 1.36z" />
+        </svg>
+      );
+    case 'instagram':
+      return (
+        <svg {...common}>
+          <rect x="3" y="3" width="18" height="18" rx="5" />
+          <circle cx="12" cy="12" r="4" />
+          <circle cx="17.3" cy="6.7" r="0.6" fill="currentColor" stroke="none" />
+        </svg>
+      );
+    case 'facebook':
+      return (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor">
+          <path d="M13.5 21v-7.2h2.42l.36-2.8h-2.78V9.24c0-.81.23-1.36 1.39-1.36h1.48V5.2A19.8 19.8 0 0 0 14.24 5c-2.13 0-3.6 1.3-3.6 3.68v2.32H8.24v2.8h2.4V21h2.86z" />
         </svg>
       );
     default:
@@ -623,6 +639,14 @@ export default function Landing() {
               <a href="/privacidad.html">Privacidad</a>
               <a href="/terminos.html">Términos</a>
               <a href="#contacto">Contacto</a>
+            </div>
+            <div className="landing-footer__social">
+              <a href={INSTAGRAM_URL} target="_blank" rel="noreferrer" aria-label="Instagram">
+                <Icon name="instagram" size={18} />
+              </a>
+              <a href={FACEBOOK_URL} target="_blank" rel="noreferrer" aria-label="Facebook">
+                <Icon name="facebook" size={18} />
+              </a>
             </div>
             <div className="landing-footer__meta">
               instelecjg@gmail.com · WhatsApp {WHATSAPP_DISPLAY} · Jorge Martinez
