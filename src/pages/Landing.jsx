@@ -3,6 +3,8 @@ import './Landing.css';
 
 const WHATSAPP_NUMBER = '525658105587';
 const WHATSAPP_DISPLAY = '56 5810 5587';
+const FACEBOOK_URL = 'https://www.facebook.com/share/1C3NLDyM1p/';
+const INSTAGRAM_URL = 'https://www.instagram.com/instelecjg?stkn=aWQ1eXp6c3BweWRv';
 
 const NAV_LINKS = [
   { href: '#servicios', label: 'Servicios' },
@@ -68,6 +70,16 @@ const PROCESO = [
     title: 'Se hace el trabajo',
     desc: 'Visito, confirmo el alcance final y realizo la instalación o reparación.',
   },
+];
+
+const ZONAS_COBERTURA = [
+  'Iztapalapa',
+  'Coyoacán',
+  'Benito Juárez',
+  'Naucalpan',
+  'Cuauhtémoc',
+  'Álvaro Obregón',
+  'Tlalpan',
 ];
 
 const TRABAJOS = [
@@ -182,6 +194,20 @@ function Icon({ name, size = 24 }) {
           <path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38a9.9 9.9 0 0 0 4.74 1.21h.01c5.46 0 9.9-4.45 9.9-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2zm5.8 14.14c-.24.68-1.4 1.3-1.93 1.38-.5.08-1.12.11-1.81-.11a16.6 16.6 0 0 1-1.65-.61c-2.9-1.25-4.79-4.17-4.93-4.36-.14-.19-1.18-1.57-1.18-3 0-1.42.75-2.12 1.01-2.41.27-.29.58-.36.78-.36.19 0 .39 0 .55.01.18.01.42-.07.65.5.24.58.82 2 .89 2.15.07.15.12.32.02.51-.1.19-.15.31-.29.48-.15.17-.31.38-.44.51-.15.15-.3.31-.13.6.17.29.76 1.25 1.63 2.02 1.12 1 2.06 1.31 2.35 1.46.29.15.46.13.63-.08.17-.21.72-.84.91-1.13.19-.29.38-.24.63-.14.26.1 1.65.78 1.93.92.29.14.48.21.55.33.07.12.07.68-.17 1.36z" />
         </svg>
       );
+    case 'facebook':
+      return (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor">
+          <path d="M13.5 21.9v-8.3h2.8l.4-3.2h-3.2V8.4c0-.9.25-1.55 1.58-1.55H16.8V4c-.28-.04-1.25-.12-2.37-.12-2.35 0-3.96 1.43-3.96 4.06v2.27H7.6v3.2h2.87v8.3h3.03Z" />
+        </svg>
+      );
+    case 'instagram':
+      return (
+        <svg {...common}>
+          <rect x="3.5" y="3.5" width="17" height="17" rx="5" />
+          <circle cx="12" cy="12" r="4" />
+          <circle cx="17.2" cy="6.8" r="1" fill="currentColor" stroke="none" />
+        </svg>
+      );
     default:
       return null;
   }
@@ -292,7 +318,9 @@ export default function Landing() {
               </h1>
               <p className="landing-hero__lead">
                 Técnico electricista con 9 años de experiencia en instalaciones residenciales,
-                comerciales e industriales. Desde un cambio de pastillas hasta tableros trifásicos.
+                comerciales e industriales. Doy servicio en Iztapalapa, Coyoacán, Benito Juárez,
+                Naucalpan y el resto de CDMX y Estado de México. Desde un cambio de pastillas hasta
+                tableros trifásicos.
               </p>
               <div className="landing-hero__ctas">
                 <a
@@ -420,6 +448,25 @@ export default function Landing() {
           </div>
         </section>
 
+        <section className="landing__section landing-coverage" id="cobertura">
+          <Reveal>
+            <div className="landing__eyebrow">Zona de servicio</div>
+            <h2 className="landing__heading">Cobertura en CDMX y Estado de México</h2>
+            <p className="landing__subhead">
+              Atiendo alcaldías y municipios como Iztapalapa, Coyoacán, Benito Juárez y Naucalpan,
+              además de zonas cercanas dentro de la Ciudad de México y el Estado de México. Escríbeme
+              tu ubicación por WhatsApp y te confirmo tiempos de visita.
+            </p>
+          </Reveal>
+          <Reveal className="landing-coverage__grid">
+            {ZONAS_COBERTURA.map((zona) => (
+              <span className="landing-coverage__chip" key={zona}>
+                {zona}
+              </span>
+            ))}
+          </Reveal>
+        </section>
+
         <section className="landing__section" id="trabajos">
           <div className="landing-portfolio__head">
             <Reveal as="div">
@@ -433,12 +480,15 @@ export default function Landing() {
           <div className="landing-portfolio__grid">
             {TRABAJOS.map((trabajo) => (
               <Reveal className="landing-portfolio__item" key={trabajo.src}>
-                <img
-                  className="landing-portfolio__item-img"
-                  src={trabajo.src}
-                  alt={trabajo.alt}
-                  loading="lazy"
-                />
+                <picture>
+                  <source srcSet={trabajo.src.replace(/\.jpg$/, '.webp')} type="image/webp" />
+                  <img
+                    className="landing-portfolio__item-img"
+                    src={trabajo.src}
+                    alt={trabajo.alt}
+                    loading="lazy"
+                  />
+                </picture>
                 <span className="landing-portfolio__item-label">{trabajo.label}</span>
               </Reveal>
             ))}
@@ -449,6 +499,19 @@ export default function Landing() {
               tableros trifásicos completos."
             </p>
             <span>9 años de experiencia en campo</span>
+          </Reveal>
+
+          <Reveal className="landing-reviews">
+            <div className="landing-reviews__stars" aria-hidden="true">
+              ★★★★★
+            </div>
+            <p className="landing-reviews__text">
+              Consulta y deja tu opinión en nuestra ficha de Google Business.
+            </p>
+            {/* TODO: reemplazar href="#" por el link real del perfil de Google Business (y agregar target="_blank" rel="noreferrer") en cuanto esté verificado */}
+            <a className="landing-btn landing-btn--ghost" href="#">
+              Ver reseñas en Google
+            </a>
           </Reveal>
         </section>
 
@@ -627,6 +690,24 @@ export default function Landing() {
             <div className="landing-footer__meta">
               instelecjg@gmail.com · WhatsApp {WHATSAPP_DISPLAY} · Jorge Martinez
             </div>
+          </div>
+          <div className="landing-footer__social">
+            <a
+              href={FACEBOOK_URL}
+              target="_blank"
+              rel="noreferrer"
+              aria-label="Facebook de Instalaciones Eléctricas J-G"
+            >
+              <Icon name="facebook" size={20} />
+            </a>
+            <a
+              href={INSTAGRAM_URL}
+              target="_blank"
+              rel="noreferrer"
+              aria-label="Instagram de Instalaciones Eléctricas J-G"
+            >
+              <Icon name="instagram" size={20} />
+            </a>
           </div>
         </div>
       </footer>
