@@ -70,6 +70,17 @@ const PROCESO = [
   },
 ];
 
+const ZONAS_COBERTURA = [
+  'Iztapalapa',
+  'Coyoacán',
+  'Benito Juárez',
+  'Naucalpan',
+  'Cuauhtémoc',
+  'Álvaro Obregón',
+  'Tlalpan',
+  'Ecatepec',
+];
+
 const TRABAJOS = [
   {
     src: '/portfolio/tableros-cableado-organizado.jpg',
@@ -292,7 +303,9 @@ export default function Landing() {
               </h1>
               <p className="landing-hero__lead">
                 Técnico electricista con 9 años de experiencia en instalaciones residenciales,
-                comerciales e industriales. Desde un cambio de pastillas hasta tableros trifásicos.
+                comerciales e industriales. Doy servicio en Iztapalapa, Coyoacán, Benito Juárez,
+                Naucalpan y el resto de CDMX y Estado de México. Desde un cambio de pastillas hasta
+                tableros trifásicos.
               </p>
               <div className="landing-hero__ctas">
                 <a
@@ -420,6 +433,25 @@ export default function Landing() {
           </div>
         </section>
 
+        <section className="landing__section landing-coverage" id="cobertura">
+          <Reveal>
+            <div className="landing__eyebrow">Zona de servicio</div>
+            <h2 className="landing__heading">Cobertura en CDMX y Estado de México</h2>
+            <p className="landing__subhead">
+              Atiendo alcaldías y municipios como Iztapalapa, Coyoacán, Benito Juárez y Naucalpan,
+              además de zonas cercanas dentro de la Ciudad de México y el Estado de México. Escríbeme
+              tu ubicación por WhatsApp y te confirmo tiempos de visita.
+            </p>
+          </Reveal>
+          <Reveal className="landing-coverage__grid">
+            {ZONAS_COBERTURA.map((zona) => (
+              <span className="landing-coverage__chip" key={zona}>
+                {zona}
+              </span>
+            ))}
+          </Reveal>
+        </section>
+
         <section className="landing__section" id="trabajos">
           <div className="landing-portfolio__head">
             <Reveal as="div">
@@ -433,12 +465,15 @@ export default function Landing() {
           <div className="landing-portfolio__grid">
             {TRABAJOS.map((trabajo) => (
               <Reveal className="landing-portfolio__item" key={trabajo.src}>
-                <img
-                  className="landing-portfolio__item-img"
-                  src={trabajo.src}
-                  alt={trabajo.alt}
-                  loading="lazy"
-                />
+                <picture>
+                  <source srcSet={trabajo.src.replace(/\.jpg$/, '.webp')} type="image/webp" />
+                  <img
+                    className="landing-portfolio__item-img"
+                    src={trabajo.src}
+                    alt={trabajo.alt}
+                    loading="lazy"
+                  />
+                </picture>
                 <span className="landing-portfolio__item-label">{trabajo.label}</span>
               </Reveal>
             ))}
@@ -449,6 +484,19 @@ export default function Landing() {
               tableros trifásicos completos."
             </p>
             <span>9 años de experiencia en campo</span>
+          </Reveal>
+
+          <Reveal className="landing-reviews">
+            <div className="landing-reviews__stars" aria-hidden="true">
+              ★★★★★
+            </div>
+            <p className="landing-reviews__text">
+              Consulta y deja tu opinión en nuestra ficha de Google Business.
+            </p>
+            {/* TODO: reemplazar href="#" por el link real del perfil de Google Business (y agregar target="_blank" rel="noreferrer") en cuanto esté verificado */}
+            <a className="landing-btn landing-btn--ghost" href="#">
+              Ver reseñas en Google
+            </a>
           </Reveal>
         </section>
 

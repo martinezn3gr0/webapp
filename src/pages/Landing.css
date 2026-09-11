@@ -560,6 +560,26 @@
   margin: 0;
 }
 
+/* Coverage */
+.landing-coverage__grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 28px;
+}
+
+.landing-coverage__chip {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--l-ink);
+  border: 1px solid var(--l-line);
+  background: var(--l-graphite-low);
+  border-radius: 999px;
+  padding: 8px 16px;
+}
+
 /* Portfolio */
 .landing-portfolio__head {
   display: flex;
@@ -651,6 +671,27 @@
   color: var(--l-primary);
   text-transform: uppercase;
   letter-spacing: 0.2em;
+}
+
+.landing-reviews {
+  margin-top: 24px;
+  text-align: center;
+  padding: 32px 24px;
+  border: 1px solid var(--l-line);
+  border-radius: 16px;
+  background: rgba(26, 27, 32, 0.7);
+}
+
+.landing-reviews__stars {
+  font-size: 1.5rem;
+  letter-spacing: 0.15em;
+  color: #ffb400;
+  margin-bottom: 12px;
+}
+
+.landing-reviews__text {
+  color: var(--l-ink-soft);
+  margin: 0 0 20px;
 }
 
 /* Contact */
