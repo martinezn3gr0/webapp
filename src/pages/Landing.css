@@ -967,6 +967,26 @@ a.landing-contact__value:hover {
   opacity: 0.5;
 }
 
+.landing-footer__social {
+  display: flex;
+  gap: 14px;
+}
+
+.landing-footer__social a {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border: 1px solid var(--l-line);
+  border-radius: 50%;
+  color: var(--l-ink-soft);
+}
+
+.landing-footer__social a:hover {
+  color: var(--l-primary);
+  border-color: var(--l-primary);
+}
+
 /* Sticky WhatsApp */
 .landing-sticky-wa {
   position: fixed;
