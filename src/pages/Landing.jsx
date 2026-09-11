@@ -78,7 +78,6 @@ const ZONAS_COBERTURA = [
   'Cuauhtémoc',
   'Álvaro Obregón',
   'Tlalpan',
-  'Ecatepec',
 ];
 
 const TRABAJOS = [
