@@ -4,7 +4,9 @@ import './Landing.css';
 const WHATSAPP_NUMBER = '525658105587';
 const WHATSAPP_DISPLAY = '56 5810 5587';
 const FACEBOOK_URL = 'https://www.facebook.com/share/1C3NLDyM1p/';
-const INSTAGRAM_URL = 'https://www.instagram.com/instelecjg?stkn=aWQ1eXp6c3BweWRv';
+const INSTAGRAM_URL = 'https://www.instagram.com/instelecjg/';
+const GOOGLE_REVIEWS_URL =
+  'https://www.google.com/maps/search/?api=1&query=Instalaciones+Electricas+J-G+CDMX';
 
 const NAV_LINKS = [
   { href: '#servicios', label: 'Servicios' },
@@ -508,8 +510,12 @@ export default function Landing() {
             <p className="landing-reviews__text">
               Consulta y deja tu opinión en nuestra ficha de Google Business.
             </p>
-            {/* TODO: reemplazar href="#" por el link real del perfil de Google Business (y agregar target="_blank" rel="noreferrer") en cuanto esté verificado */}
-            <a className="landing-btn landing-btn--ghost" href="#">
+            <a
+              className="landing-btn landing-btn--ghost"
+              href={GOOGLE_REVIEWS_URL}
+              target="_blank"
+              rel="noreferrer"
+            >
               Ver reseñas en Google
             </a>
           </Reveal>
