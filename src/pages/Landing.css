@@ -857,6 +857,20 @@ a.landing-contact__value:hover {
   cursor: default;
 }
 
+.landing-form__status {
+  margin: 0 0 12px;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.landing-form__status--ok {
+  color: #7dffb3;
+}
+
+.landing-form__status--error {
+  color: #ffb4ab;
+}
+
 /* Legal sections */
 .landing-legal {
   border-top: 1px solid var(--l-line);
@@ -990,7 +1004,7 @@ a.landing-contact__value:hover {
 /* Sticky WhatsApp */
 .landing-sticky-wa {
   position: fixed;
-  bottom: 32px;
+  bottom: 96px;
   right: 24px;
   z-index: 100;
   display: flex;

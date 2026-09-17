@@ -1,10 +1,14 @@
 import { useEffect, useRef, useState } from 'react';
+import { supabase, supabaseConfigured } from '../supabaseClient';
+import LeadBot from '../components/LeadBot';
 import './Landing.css';
 
 const WHATSAPP_NUMBER = '525658105587';
 const WHATSAPP_DISPLAY = '56 5810 5587';
 const FACEBOOK_URL = 'https://www.facebook.com/share/1C3NLDyM1p/';
-const INSTAGRAM_URL = 'https://www.instagram.com/instelecjg?stkn=aWQ1eXp6c3BweWRv';
+const INSTAGRAM_URL = 'https://www.instagram.com/instelecjg/';
+const GOOGLE_REVIEWS_URL =
+  'https://www.google.com/maps/search/?api=1&query=Instalaciones+Electricas+J-G+CDMX';
 
 const NAV_LINKS = [
   { href: '#servicios', label: 'Servicios' },
@@ -268,14 +272,36 @@ export default function Landing() {
     urgencia: 'no',
     descripcion: '',
   });
+  const [submitting, setSubmitting] = useState(false);
+  const [formError, setFormError] = useState('');
+  const [formOk, setFormOk] = useState(false);
 
   function updateField(field, value) {
     setForm((prev) => ({ ...prev, [field]: value }));
   }
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
-    window.open(buildWhatsAppUrl(form), '_blank', 'noopener');
+    setFormError('');
+    setFormOk(false);
+
+    if (!supabaseConfigured) {
+      window.open(buildWhatsAppUrl(form), '_blank', 'noopener');
+      return;
+    }
+
+    setSubmitting(true);
+    const { data, error } = await supabase.functions.invoke('submit-lead', {
+      body: { ...form, fuente: 'web_form' },
+    });
+    setSubmitting(false);
+
+    if (error || data?.error) {
+      setFormError('No se pudo guardar. Puedes enviarlo por WhatsApp mientras tanto.');
+      return;
+    }
+
+    setFormOk(true);
   }
 
   return (
@@ -508,8 +534,13 @@ export default function Landing() {
             <p className="landing-reviews__text">
               Consulta y deja tu opinión en nuestra ficha de Google Business.
             </p>
-            {/* TODO: reemplazar href="#" por el link real del perfil de Google Business (y agregar target="_blank" rel="noreferrer") en cuanto esté verificado */}
-            <a className="landing-btn landing-btn--ghost" href="#">
+            {/* TODO: reemplazar por el link real del perfil de Google Business cuando esté verificado */}
+            <a
+              className="landing-btn landing-btn--ghost"
+              href={GOOGLE_REVIEWS_URL}
+              target="_blank"
+              rel="noreferrer"
+            >
               Ver reseñas en Google
             </a>
           </Reveal>
@@ -634,9 +665,43 @@ export default function Landing() {
                     />
                   </div>
 
-                  <button type="submit" className="landing-btn landing-btn--primary landing-form__submit">
-                    Enviar por WhatsApp
+                  {formError && <p className="landing-form__status landing-form__status--error">{formError}</p>}
+                  {formOk && (
+                    <p className="landing-form__status landing-form__status--ok">
+                      Solicitud enviada. Un asesor te contactará pronto.
+                    </p>
+                  )}
+
+                  <button
+                    type="submit"
+                    className="landing-btn landing-btn--primary landing-form__submit"
+                    disabled={submitting}
+                  >
+                    {submitting ? 'Enviando…' : 'Enviar cotización'}
                   </button>
+
+                  {formOk && (
+                    <a
+                      className="landing-btn landing-btn--ghost landing-form__submit"
+                      href={buildWhatsAppUrl(form)}
+                      target="_blank"
+                      rel="noreferrer"
+                      style={{ marginTop: 10, display: 'inline-flex', justifyContent: 'center' }}
+                    >
+                      También avisar por WhatsApp
+                    </a>
+                  )}
+                  {!formOk && formError && (
+                    <a
+                      className="landing-btn landing-btn--ghost landing-form__submit"
+                      href={buildWhatsAppUrl(form)}
+                      target="_blank"
+                      rel="noreferrer"
+                      style={{ marginTop: 10, display: 'inline-flex', justifyContent: 'center' }}
+                    >
+                      Enviar por WhatsApp
+                    </a>
+                  )}
                 </form>
               </div>
             </Reveal>
@@ -712,13 +777,15 @@ export default function Landing() {
         </div>
       </footer>
 
+      <LeadBot />
+
       <a
         className="landing-sticky-wa"
         href={`https://wa.me/${WHATSAPP_NUMBER}`}
         target="_blank"
         rel="noreferrer"
       >
-        <span className="landing-sticky-wa__label">Cotizar ahora</span>
+        <span className="landing-sticky-wa__label">WhatsApp</span>
         <span className="landing-sticky-wa__button">
           <Icon name="whatsapp" />
         </span>
