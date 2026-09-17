@@ -6,7 +6,7 @@ const PHONE_NUMBER_ID = Deno.env.get("WHATSAPP_PHONE_NUMBER_ID") ?? "";
 const SUPABASE_URL    = Deno.env.get("SUPABASE_URL") ?? "";
 const ANON_KEY        = Deno.env.get("SUPABASE_ANON_KEY") ?? "";
 const SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "";
-const ALLOWED_ORIGIN  = Deno.env.get("PANEL_ORIGIN") ?? "https://instelecjg.vercel.app";
+const ALLOWED_ORIGIN  = Deno.env.get("PANEL_ORIGIN") ?? "https://instelecjg.com";
 
 const GRAPH_URL = `https://graph.facebook.com/v20.0/${PHONE_NUMBER_ID}/messages`;
 
