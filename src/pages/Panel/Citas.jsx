@@ -1,5 +1,7 @@
-import { useCitas } from '../../hooks/useCitas';
+import { useState } from 'react';
+import { useCitas, formatCitaFechaHora } from '../../hooks/useCitas';
 import EmptyState from '../../components/EmptyState';
+import NuevaCitaModal from '../../components/NuevaCitaModal';
 import './Citas.css';
 
 const ESTADOS = {
@@ -10,7 +12,8 @@ const ESTADOS = {
 };
 
 export default function Citas() {
-  const { citas, loading, error, actualizarEstado } = useCitas();
+  const { citas, loading, error, actualizarEstado, crearCita } = useCitas();
+  const [modalOpen, setModalOpen] = useState(false);
 
   async function handleActualizarEstado(citaId, estado) {
     const ok = await actualizarEstado(citaId, estado);
@@ -23,25 +26,24 @@ export default function Citas() {
     <div className="citas-page">
       <div className="citas-page__header">
         <h1>Citas agendadas</h1>
+        <button type="button" className="citas-page__nueva" onClick={() => setModalOpen(true)}>
+          Nueva cita
+        </button>
       </div>
 
-      {error && <p className="citas-page__error">No se pudieron cargar las citas: {error}</p>}
+      {error && <p className="citas-page__error">{error}</p>}
       {loading && <p className="citas-page__loading">Cargando…</p>}
 
       <div className="citas-list">
         {citas.map((cita) => {
-          const fecha = new Date(cita.fecha_hora);
+          const { dia, hora } = formatCitaFechaHora(cita.fecha_hora);
           const estadoInfo = ESTADOS[cita.estado] ?? ESTADOS.pendiente;
 
           return (
             <div key={cita.id} className="cita-card">
               <div className="cita-card__fecha">
-                <span className="cita-card__dia">
-                  {fecha.toLocaleDateString('es', { day: '2-digit', month: 'short' })}
-                </span>
-                <span className="cita-card__hora">
-                  {fecha.toLocaleTimeString('es', { hour: '2-digit', minute: '2-digit' })}
-                </span>
+                <span className="cita-card__dia">{dia}</span>
+                <span className="cita-card__hora">{hora}</span>
               </div>
 
               <div className="cita-card__info">
@@ -49,6 +51,9 @@ export default function Citas() {
                   {cita.contactos?.nombre || cita.contactos?.phone_number}
                 </span>
                 {cita.notas && <span className="cita-card__notas">{cita.notas}</span>}
+                {cita.duracion_min && (
+                  <span className="cita-card__meta">{cita.duracion_min} min · CDMX</span>
+                )}
               </div>
 
               <span
@@ -92,10 +97,12 @@ export default function Citas() {
           <EmptyState
             icon="calendar"
             title="No hay citas agendadas todavía"
-            subtitle="Las citas que confirmes con tus clientes aparecen aquí."
+            subtitle="Crea una con «Nueva cita» para probar el flujo de confirmación."
           />
         )}
       </div>
+
+      <NuevaCitaModal open={modalOpen} onClose={() => setModalOpen(false)} onCrear={crearCita} />
     </div>
   );
 }

@@ -71,3 +71,135 @@
   margin: 0;
   padding: var(--space-2) var(--space-4);
 }
+
+.quote-summary__edit {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin-top: var(--space-3);
+  padding-top: var(--space-3);
+  border-top: 1px dashed var(--rule-soft);
+}
+
+.quote-summary__edit-label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.quote-summary__monto-row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.quote-summary__currency {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.quote-summary__input {
+  flex: 1;
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 600;
+  padding: 8px 10px;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-sm);
+  background: var(--paper-raised);
+  color: var(--ink);
+  max-width: 180px;
+}
+
+.quote-summary__input:focus {
+  border-color: var(--teal-active);
+  outline: none;
+}
+
+.quote-summary__monto-hint {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: none;
+  letter-spacing: 0;
+  color: var(--ink);
+}
+
+.quote-summary__estatus-group {
+  margin: 0;
+  padding: 0;
+  border: none;
+}
+
+.quote-summary__estatus-group legend {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  margin-bottom: 6px;
+}
+
+.quote-summary__estatus-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.quote-summary__estatus-option {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink);
+  background: var(--paper-raised);
+  border: 1px solid var(--rule-soft);
+  border-radius: var(--radius-sm);
+  padding: 6px 10px;
+  cursor: pointer;
+}
+
+.quote-summary__estatus-option:has(input:checked) {
+  border-color: var(--teal-active);
+  background: white;
+}
+
+.quote-summary__edit-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.quote-summary__save {
+  font-size: 12px;
+  font-weight: 700;
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  border: none;
+  background: var(--navy-deep);
+  color: white;
+  cursor: pointer;
+}
+
+.quote-summary__save:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.quote-summary__saved {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--teal-active);
+}
+
+.quote-summary__save-error {
+  margin: 0;
+  font-size: 12px;
+  color: var(--red-alert);
+}

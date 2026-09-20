@@ -4,11 +4,35 @@
   height: 100%;
 }
 
+.citas-page__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  margin-bottom: var(--space-4);
+}
+
 .citas-page__header h1 {
   font-family: var(--font-display);
   font-size: 18px;
-  margin: 0 0 var(--space-4);
+  margin: 0;
   color: var(--ink);
+}
+
+.citas-page__nueva {
+  font-size: 13px;
+  font-weight: 700;
+  padding: 8px 14px;
+  border-radius: var(--radius-sm);
+  border: none;
+  background: var(--navy-deep);
+  color: white;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.citas-page__nueva:hover {
+  background: var(--navy-mid);
 }
 
 .citas-page__loading,
@@ -84,6 +108,12 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.cita-card__meta {
+  font-size: 11px;
+  color: var(--ink-soft);
+  margin-top: 2px;
 }
 
 .cita-card__estado {

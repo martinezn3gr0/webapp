@@ -1,0 +1,145 @@
+.nueva-cita-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.55);
+  display: grid;
+  place-items: center;
+  padding: var(--space-4);
+  z-index: 40;
+}
+
+.nueva-cita-modal {
+  width: 100%;
+  max-width: 480px;
+  max-height: 90vh;
+  overflow-y: auto;
+  background: var(--paper-raised);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--rule-soft);
+  box-shadow: var(--shadow-card);
+}
+
+.nueva-cita-modal__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-4) var(--space-4) var(--space-2);
+  border-bottom: 1px solid var(--rule-soft);
+}
+
+.nueva-cita-modal__header h2 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 18px;
+  color: var(--ink);
+}
+
+.nueva-cita-modal__close {
+  border: none;
+  background: transparent;
+  font-size: 24px;
+  line-height: 1;
+  color: var(--ink-soft);
+  cursor: pointer;
+  padding: 0 4px;
+}
+
+.nueva-cita-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-4);
+}
+
+.nueva-cita-form__label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink-soft);
+}
+
+.nueva-cita-form__input {
+  font-family: var(--font-body);
+  font-size: 14px;
+  padding: 10px 12px;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-sm);
+  background: var(--paper);
+  color: var(--ink);
+}
+
+.nueva-cita-form__input:focus {
+  border-color: var(--teal-active);
+  outline: none;
+}
+
+.nueva-cita-form__textarea {
+  resize: vertical;
+  min-height: 72px;
+}
+
+.nueva-cita-form__row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-3);
+}
+
+@media (max-width: 480px) {
+  .nueva-cita-form__row {
+    grid-template-columns: 1fr;
+  }
+}
+
+.nueva-cita-form__check {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.nueva-cita-form__error {
+  margin: 0;
+  color: white;
+  background: var(--red-alert);
+  border-radius: var(--radius-sm);
+  padding: var(--space-2) var(--space-3);
+  font-size: 13px;
+}
+
+.nueva-cita-form__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-2);
+  margin-top: var(--space-2);
+}
+
+.nueva-cita-form__btn {
+  font-size: 13px;
+  font-weight: 700;
+  padding: 10px 14px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--rule);
+  background: var(--paper);
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.nueva-cita-form__btn:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.nueva-cita-form__btn--primary {
+  background: var(--navy-deep);
+  color: white;
+  border-color: var(--navy-deep);
+}
+
+.nueva-cita-form__btn--primary:hover:not(:disabled) {
+  background: var(--navy-mid);
+}
