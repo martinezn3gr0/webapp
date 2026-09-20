@@ -110,6 +110,26 @@ const TRABAJOS = [
     label: 'Medidores CFE — Multifamiliar',
     alt: 'Tres medidores eléctricos instalados en fachada de edificio multifamiliar',
   },
+  {
+    src: '/portfolio/iluminacion-led-escalera.jpg',
+    label: 'Iluminación LED — Escalera',
+    alt: 'Iluminación LED instalada en escalera residencial con acabado final',
+  },
+  {
+    src: '/portfolio/centro-carga-instalacion.jpg',
+    label: 'Centro de carga',
+    alt: 'Instalación de centro de carga con pastillas y cableado organizado',
+  },
+  {
+    src: '/portfolio/transformador-225kva.jpg',
+    label: 'Transformador 225 kVA',
+    alt: 'Trabajo en transformador industrial de 225 kVA en sitio',
+  },
+  {
+    src: '/portfolio/diagnostico-pinza-aemc.jpg',
+    label: 'Diagnóstico eléctrico',
+    alt: 'Medición profesional con pinza amperimétrica AEMC en instalación eléctrica',
+  },
 ];
 
 function Icon({ name, size = 24 }) {
