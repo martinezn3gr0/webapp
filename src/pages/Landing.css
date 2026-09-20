@@ -423,7 +423,17 @@
   margin: 0;
 }
 
-/* Services */
+/* Services — extra bottom space on small screens so sticky WA doesn't cover prices */
+.landing__section.landing-services {
+  padding-bottom: 184px;
+}
+
+@media (min-width: 640px) {
+  .landing__section.landing-services {
+    padding-bottom: 96px;
+  }
+}
+
 .landing-services {
   background: var(--l-graphite);
 }
@@ -850,6 +860,13 @@ a.landing-contact__value:hover {
 .landing-form__submit {
   width: 100%;
   text-align: center;
+  margin-bottom: 72px;
+}
+
+@media (min-width: 640px) {
+  .landing-form__submit {
+    margin-bottom: 0;
+  }
 }
 
 .landing-form__submit:disabled {
@@ -990,12 +1007,20 @@ a.landing-contact__value:hover {
 /* Sticky WhatsApp */
 .landing-sticky-wa {
   position: fixed;
-  bottom: 32px;
+  bottom: max(24px, env(safe-area-inset-bottom, 0px));
   right: 24px;
   z-index: 100;
   display: flex;
   align-items: center;
   gap: 16px;
+  transition: opacity 0.2s ease, visibility 0.2s ease, transform 0.2s ease;
+}
+
+.landing-sticky-wa--hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translateY(12px);
 }
 
 .landing-sticky-wa__label {
