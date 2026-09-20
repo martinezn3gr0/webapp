@@ -6,8 +6,7 @@ const WHATSAPP_DISPLAY = '56 5810 5587';
 const PHONE_TEL = 'tel:+525658105587';
 const FACEBOOK_URL = 'https://www.facebook.com/share/1C3NLDyM1p/';
 const INSTAGRAM_URL = 'https://www.instagram.com/instelecjg/';
-const GOOGLE_REVIEWS_URL =
-  'https://www.google.com/maps/search/?api=1&query=Instalaciones+Electricas+J-G+CDMX';
+const GOOGLE_REVIEWS_URL = 'https://g.page/r/CW3H3kY3PUVfEBI/review';
 
 const NAV_LINKS = [
   { href: '#servicios', label: 'Servicios' },
