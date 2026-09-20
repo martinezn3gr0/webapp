@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { supabase, supabaseConfigured } from '../supabaseClient';
 import './Landing.css';
 
 const WHATSAPP_NUMBER = '525658105587';
@@ -290,16 +291,61 @@ export default function Landing() {
     urgencia: 'no',
     descripcion: '',
   });
+  const [submitting, setSubmitting] = useState(false);
+  const [formError, setFormError] = useState('');
+  const [formOk, setFormOk] = useState(false);
   const [hideStickyWa, setHideStickyWa] = useState(false);
   const contactRef = useRef(null);
 
   function updateField(field, value) {
     setForm((prev) => ({ ...prev, [field]: value }));
+    setFormOk(false);
+    setFormError('');
   }
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
-    window.open(buildWhatsAppUrl(form), '_blank', 'noopener');
+    setFormError('');
+    setFormOk(false);
+
+    const payload = {
+      nombre: form.nombre.trim(),
+      telefono: form.telefono.trim(),
+      servicio: form.servicio,
+      urgencia: form.urgencia === 'si' ? 'si' : 'no',
+      descripcion: form.descripcion.trim(),
+      fuente: 'web_form',
+    };
+
+    if (!supabaseConfigured) {
+      setFormError(
+        'El envío en línea no está disponible por ahora. Puedes enviarnos tu solicitud por WhatsApp.'
+      );
+      return;
+    }
+
+    setSubmitting(true);
+    try {
+      const { data, error } = await supabase.functions.invoke('submit-lead', {
+        body: payload,
+      });
+
+      if (error || data?.error) {
+        setFormError(
+          data?.error ||
+            'No se pudo guardar la solicitud. Puedes enviarla por WhatsApp mientras tanto.'
+        );
+        return;
+      }
+
+      setFormOk(true);
+    } catch {
+      setFormError(
+        'No se pudo guardar la solicitud. Puedes enviarla por WhatsApp mientras tanto.'
+      );
+    } finally {
+      setSubmitting(false);
+    }
   }
 
   useEffect(() => {
@@ -559,8 +605,8 @@ export default function Landing() {
             <Reveal>
               <h2 className="landing__heading">Hablemos de tu proyecto</h2>
               <p className="landing-contact__lead">
-                Respuesta inmediata por WhatsApp o llamada. Atiendo emergencias y proyectos
-                programados.
+                Deja tus datos en el formulario y un asesor te contacta. También puedes escribir
+                por WhatsApp o llamar. Atiendo emergencias y proyectos programados.
               </p>
               <div className="landing-contact__item">
                 <span className="landing-contact__icon">
@@ -685,9 +731,47 @@ export default function Landing() {
                     />
                   </div>
 
-                  <button type="submit" className="landing-btn landing-btn--primary landing-form__submit">
-                    Enviar por WhatsApp
-                  </button>
+                  {formError && (
+                    <p className="landing-form__status landing-form__status--error" role="alert">
+                      {formError}
+                    </p>
+                  )}
+                  {formOk && (
+                    <p className="landing-form__status landing-form__status--ok" role="status">
+                      Solicitud enviada. Un asesor te contactará pronto por WhatsApp o teléfono.
+                    </p>
+                  )}
+
+                  {!formOk && (
+                    <button
+                      type="submit"
+                      className="landing-btn landing-btn--primary landing-form__submit"
+                      disabled={submitting}
+                    >
+                      {submitting ? 'Enviando…' : 'Enviar solicitud'}
+                    </button>
+                  )}
+
+                  {formOk && (
+                    <a
+                      className="landing-btn landing-btn--ghost landing-form__submit landing-form__wa-secondary"
+                      href={buildWhatsAppUrl(form)}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      También avisar por WhatsApp (opcional)
+                    </a>
+                  )}
+                  {!formOk && formError && (
+                    <a
+                      className="landing-btn landing-btn--ghost landing-form__submit landing-form__wa-secondary"
+                      href={buildWhatsAppUrl(form)}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      Enviar por WhatsApp
+                    </a>
+                  )}
                 </form>
               </div>
             </Reveal>
@@ -700,17 +784,18 @@ export default function Landing() {
           <h2>Política de Privacidad</h2>
           <p>
             Instalaciones Eléctricas J-G, a cargo de Jorge Martinez. Contacto: instelecjg@gmail.com,
-            WhatsApp {WHATSAPP_DISPLAY}. El formulario de esta página abre WhatsApp con tus datos
-            (nombre, teléfono y descripción del servicio) para cotizar y agendar; no guarda esa
-            información en nuestros servidores. Si nos escribes por WhatsApp Business, el historial
-            de conversación puede almacenarse de forma segura en Supabase para dar seguimiento.
-            No compartimos datos con terceros salvo lo necesario para operar WhatsApp (Meta).
+            WhatsApp {WHATSAPP_DISPLAY}. El formulario web guarda tu solicitud (nombre, teléfono,
+            tipo de servicio, urgencia y descripción) de forma segura en Supabase para que un
+            asesor te contacte. WhatsApp es un canal opcional adicional; si nos escribes por
+            WhatsApp Business, el historial de conversación también puede almacenarse en Supabase
+            para dar seguimiento. No compartimos datos con terceros salvo lo necesario para operar
+            WhatsApp (Meta).
           </p>
           <p>
-            Puedes solicitar la eliminación de tus datos de conversación escribiendo a
-            instelecjg@gmail.com. Uso de WhatsApp Business API bajo las políticas de Meta.
+            Puedes solicitar la eliminación de tus datos escribiendo a instelecjg@gmail.com. Uso
+            de WhatsApp Business API bajo las políticas de Meta.
           </p>
-          <p>Última actualización: Agosto 2026. Cobertura: CDMX y Estado de México.</p>
+          <p>Última actualización: Septiembre 2026. Cobertura: CDMX y Estado de México.</p>
         </div>
       </section>
 
