@@ -3,8 +3,10 @@ import './Landing.css';
 
 const WHATSAPP_NUMBER = '525658105587';
 const WHATSAPP_DISPLAY = '56 5810 5587';
+const PHONE_TEL = 'tel:+525658105587';
 const FACEBOOK_URL = 'https://www.facebook.com/share/1C3NLDyM1p/';
-const INSTAGRAM_URL = 'https://www.instagram.com/instelecjg?stkn=aWQ1eXp6c3BweWRv';
+const INSTAGRAM_URL = 'https://www.instagram.com/instelecjg/';
+const GOOGLE_REVIEWS_URL = 'https://g.page/r/CW3H3kY3PUVfEBI/review';
 
 const NAV_LINKS = [
   { href: '#servicios', label: 'Servicios' },
@@ -268,6 +270,8 @@ export default function Landing() {
     urgencia: 'no',
     descripcion: '',
   });
+  const [hideStickyWa, setHideStickyWa] = useState(false);
+  const contactRef = useRef(null);
 
   function updateField(field, value) {
     setForm((prev) => ({ ...prev, [field]: value }));
@@ -277,6 +281,17 @@ export default function Landing() {
     e.preventDefault();
     window.open(buildWhatsAppUrl(form), '_blank', 'noopener');
   }
+
+  useEffect(() => {
+    const el = contactRef.current;
+    if (!el || typeof IntersectionObserver === 'undefined') return undefined;
+    const observer = new IntersectionObserver(
+      ([entry]) => setHideStickyWa(entry.isIntersecting),
+      { root: null, threshold: 0.15, rootMargin: '0px 0px -10% 0px' }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
 
   return (
     <div className="landing">
@@ -331,8 +346,8 @@ export default function Landing() {
                 >
                   Cotizar por WhatsApp
                 </a>
-                <a className="landing-btn landing-btn--ghost" href="#servicios">
-                  Ver servicios
+                <a className="landing-btn landing-btn--ghost" href={PHONE_TEL}>
+                  Llamar {WHATSAPP_DISPLAY}
                 </a>
               </div>
               <div className="landing-hero__stats">
@@ -508,23 +523,28 @@ export default function Landing() {
             <p className="landing-reviews__text">
               Consulta y deja tu opinión en nuestra ficha de Google Business.
             </p>
-            {/* TODO: reemplazar href="#" por el link real del perfil de Google Business (y agregar target="_blank" rel="noreferrer") en cuanto esté verificado */}
-            <a className="landing-btn landing-btn--ghost" href="#">
+            <a
+              className="landing-btn landing-btn--ghost"
+              href={GOOGLE_REVIEWS_URL}
+              target="_blank"
+              rel="noreferrer"
+            >
               Ver reseñas en Google
             </a>
           </Reveal>
         </section>
 
-        <section className="landing__section landing-contact" id="contacto">
+        <section className="landing__section landing-contact" id="contacto" ref={contactRef}>
           <div className="landing-contact__grid">
             <Reveal>
               <h2 className="landing__heading">Hablemos de tu proyecto</h2>
               <p className="landing-contact__lead">
-                Respuesta inmediata por WhatsApp. Atiendo emergencias y proyectos programados.
+                Respuesta inmediata por WhatsApp o llamada. Atiendo emergencias y proyectos
+                programados.
               </p>
               <div className="landing-contact__item">
                 <span className="landing-contact__icon">
-                  <Icon name="call" />
+                  <Icon name="whatsapp" />
                 </span>
                 <div>
                   <div className="landing-contact__label">WhatsApp directo</div>
@@ -535,6 +555,17 @@ export default function Landing() {
                     rel="noreferrer"
                   >
                     {WHATSAPP_DISPLAY}
+                  </a>
+                </div>
+              </div>
+              <div className="landing-contact__item">
+                <span className="landing-contact__icon">
+                  <Icon name="call" />
+                </span>
+                <div>
+                  <div className="landing-contact__label">Llamar</div>
+                  <a className="landing-contact__value" href={PHONE_TEL}>
+                    +52 {WHATSAPP_DISPLAY}
                   </a>
                 </div>
               </div>
@@ -649,13 +680,15 @@ export default function Landing() {
           <h2>Política de Privacidad</h2>
           <p>
             Instalaciones Eléctricas J-G, a cargo de Jorge Martinez. Contacto: instelecjg@gmail.com,
-            WhatsApp {WHATSAPP_DISPLAY}. Recopilamos nombre, teléfono y descripción del servicio
-            únicamente para generar cotizaciones y agendar citas. No compartimos datos con terceros.
-            Almacenamos la información en Supabase de forma segura.
+            WhatsApp {WHATSAPP_DISPLAY}. El formulario de esta página abre WhatsApp con tus datos
+            (nombre, teléfono y descripción del servicio) para cotizar y agendar; no guarda esa
+            información en nuestros servidores. Si nos escribes por WhatsApp Business, el historial
+            de conversación puede almacenarse de forma segura en Supabase para dar seguimiento.
+            No compartimos datos con terceros salvo lo necesario para operar WhatsApp (Meta).
           </p>
           <p>
-            Puedes solicitar la eliminación de tus datos escribiendo a instelecjg@gmail.com. Uso de
-            WhatsApp Business API bajo las políticas de Meta.
+            Puedes solicitar la eliminación de tus datos de conversación escribiendo a
+            instelecjg@gmail.com. Uso de WhatsApp Business API bajo las políticas de Meta.
           </p>
           <p>Última actualización: Agosto 2026. Cobertura: CDMX y Estado de México.</p>
         </div>
@@ -713,10 +746,12 @@ export default function Landing() {
       </footer>
 
       <a
-        className="landing-sticky-wa"
+        className={`landing-sticky-wa${hideStickyWa ? ' landing-sticky-wa--hidden' : ''}`}
         href={`https://wa.me/${WHATSAPP_NUMBER}`}
         target="_blank"
         rel="noreferrer"
+        aria-hidden={hideStickyWa}
+        tabIndex={hideStickyWa ? -1 : undefined}
       >
         <span className="landing-sticky-wa__label">Cotizar ahora</span>
         <span className="landing-sticky-wa__button">
