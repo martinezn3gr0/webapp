@@ -55,9 +55,9 @@ seguridad, el token de WhatsApp nunca toca el cliente). Cuando escribes y das
 
 Esa función ya está desplegada en tu proyecto de Supabase.
 
-## 6. Bot de WhatsApp (Meta)
+## 6. Bot de WhatsApp (Meta + Twilio Sandbox)
 
-El código de las dos Edge Functions vive versionado en `supabase/functions/`:
+El código de las Edge Functions vive versionado en `supabase/functions/`:
 
 - **`whatsapp-webhook`** — recibe los mensajes entrantes de la API de Meta,
   verifica la firma (`x-hub-signature-256`), recopila los datos de cotización
@@ -65,7 +65,13 @@ El código de las dos Edge Functions vive versionado en `supabase/functions/`:
   cliente elige horario, crea una fila en `citas` con `estado: pendiente`
   (nunca `confirmada` ni montos inventados). Al terminar pasa la conversación
   a `estado_bot: humano` para que el agente confirme en el panel.
-- **`send-message`** — usada por el panel para responder (ver punto 5).
+- **`twilio-whatsapp-webhook`** — mismo flujo de negocio vía **Twilio WhatsApp
+  Sandbox** (firma `X-Twilio-Signature`, respuestas por REST API, opciones
+  numeradas `1`/`2`/`3`). Preferido mientras Meta Business no esté verificado.
+  Guía: `supabase/functions/twilio-whatsapp-webhook/README.md`.
+- **`send-message`** — usada por el panel para responder (ver punto 5; aún Meta).
+- Helpers compartidos en `supabase/functions/_shared/` (`slot-utils`,
+  `quote-bot`, `twilio-utils`).
 
 ### Flujo del bot (resumen)
 
@@ -83,13 +89,25 @@ El código de las dos Edge Functions vive versionado en `supabase/functions/`:
    `visita` saltan a horarios (si falta el nombre, lo pide primero).
 
 **Importante:** tras mergear cambios del webhook hay que **volver a desplegar**
-la Edge Function `whatsapp-webhook` en Supabase para que Meta use el código nuevo.
+las Edge Functions afectadas en Supabase (`whatsapp-webhook` y/o
+`twilio-whatsapp-webhook`).
 
-### Probar con WhatsApp (checklist)
+### Probar con Twilio Sandbox (recomendado ahora)
 
-1. Confirma que los secrets de Meta existen en Supabase (tabla abajo). No
-   hardcodees tokens en el repo.
-2. Despliega `whatsapp-webhook` (CLI o Dashboard → Edge Functions).
+1. Secrets Twilio en Supabase (tabla abajo). No hardcodees tokens en el repo.
+2. Despliega `twilio-whatsapp-webhook` (`verify_jwt` ya está en `false` en
+   `supabase/config.toml`).
+3. En Twilio Sandbox → «When a message comes in» → HTTP POST a:
+   `https://fxgdalrilgrewndbrkuy.supabase.co/functions/v1/twilio-whatsapp-webhook`
+4. Desde el celular: envía el código `join …` al número Sandbox, luego `hola`.
+5. Misma checklist de flujo que abajo (cotización → 1/2 → slots → pendiente).
+
+Detalle paso a paso: `supabase/functions/twilio-whatsapp-webhook/README.md`.
+
+### Probar con Meta WhatsApp (cuando vuelva a estar disponible)
+
+1. Confirma que los secrets de Meta existen en Supabase (tabla abajo).
+2. Despliega `whatsapp-webhook`.
 3. En Meta → WhatsApp → Configuration, el callback apunta a esa función y el
    Verify Token coincide con `META_VERIFY_TOKEN`.
 4. Desde un número de prueba (no uses un contacto que ya esté en
@@ -104,17 +122,21 @@ la Edge Function `whatsapp-webhook` en Supabase para que Meta use el código nue
    falta, luego horarios.
 6. Prueba «Solo cotización» → mensaje de cierre y handoff sin crear cita.
 
-Helpers de horarios (sin Meta): 
+Helpers (sin red):
 
 ```bash
-node --test supabase/functions/whatsapp-webhook/slot-utils.test.mjs
+node --test supabase/functions/_shared/slot-utils.test.mjs
+node --test supabase/functions/_shared/twilio-utils.test.mjs
 ```
 
-Secrets que deben existir en Supabase (Project Settings → Edge Functions →
-Secrets) antes de conectar Meta:
+Secrets en Supabase (Project Settings → Edge Functions → Secrets):
 
 | Secret | Uso |
 |---|---|
+| `TWILIO_ACCOUNT_SID` | Account SID de Twilio (Sandbox) |
+| `TWILIO_AUTH_TOKEN` | Auth Token (firma del webhook + envío REST) |
+| `TWILIO_WHATSAPP_FROM` | Remitente Sandbox, p. ej. `whatsapp:+14155238886` |
+| `TWILIO_WEBHOOK_URL` | Opcional; URL pública exacta para validar la firma |
 | `WHATSAPP_TOKEN` | Token de acceso de la app de Meta para mandar mensajes |
 | `WHATSAPP_PHONE_NUMBER_ID` | ID del número de WhatsApp Business |
 | `META_APP_SECRET` | App Secret de Meta, para verificar la firma del webhook |

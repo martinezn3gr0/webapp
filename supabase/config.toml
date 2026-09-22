@@ -1,0 +1,11 @@
+# Edge Functions config — InstalecJG
+
+# WhatsApp webhooks are called by Meta / Twilio without a Supabase user JWT.
+[functions.whatsapp-webhook]
+verify_jwt = false
+
+[functions.twilio-whatsapp-webhook]
+verify_jwt = false
+
+[functions.submit-lead]
+verify_jwt = false
