@@ -229,4 +229,49 @@ describe("runQuoteBotFlow (shared)", () => {
     assert.equal(result.reason, "humano");
     assert.equal(replies.length, 0);
   });
+
+  it("supports extra validated questions (Telegram phone) and emits lead_completo", async () => {
+    const replies = [];
+    const asked = [];
+    const events = [];
+    const questions = [
+      ...QUESTIONS,
+      { key: "telefono", text: "¿Tu teléfono?", invalidText: "Número inválido", validate: (t) => (/\d{10}/.test(t) ? `52${t.replace(/\D/g, "").slice(-10)}` : null) },
+    ];
+    const { from, state } = makeFakeSupabase({
+      contacto: { id: "c1", phone_number: "tg:1", nombre: "Ana", estado_bot: "en_proceso" },
+      cotizacion: {
+        id: "cot-1",
+        contacto_id: "c1",
+        estatus: "pendiente",
+        paso_flujo: 3,
+        datos: { nombre: "Ana", tipo_servicio: "contacto" },
+      },
+    });
+    const common = {
+      supabase: { from },
+      contacto: state.contacto,
+      isNew: false,
+      questions,
+      canal: "Telegram",
+      reply: async (t) => replies.push(t),
+      replyChoices: async (t) => replies.push(t),
+      replyQuestion: async (q) => asked.push(q.key + ":" + q.text),
+      onEvent: async (e) => events.push(e.type),
+    };
+
+    await runQuoteBotFlow({ ...common, incomingText: "Revisar tablero" });
+    assert.equal(asked.at(-1), "telefono:¿Tu teléfono?");
+    assert.equal(state.cotizaciones[0].paso_flujo, 4);
+
+    const bad = await runQuoteBotFlow({ ...common, incomingText: "no sé" });
+    assert.equal(bad.reason, "invalid_answer");
+    assert.equal(asked.at(-1), "telefono:Número inválido");
+    assert.equal(state.cotizaciones[0].datos.telefono, undefined);
+
+    await runQuoteBotFlow({ ...common, incomingText: "5512345678" });
+    assert.equal(state.cotizaciones[0].datos.telefono, "525512345678");
+    assert.match(replies.at(-1), /agendar una visita/i);
+    assert.deepEqual(events, ["lead_completo"]);
+  });
 });

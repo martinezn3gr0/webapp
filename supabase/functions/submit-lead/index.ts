@@ -1,5 +1,6 @@
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
 import { createClient } from "jsr:@supabase/supabase-js@2";
+import { formatOwnerNotification, notifyOwner } from "../_shared/telegram-utils.js";
 
 const SUPABASE_URL = Deno.env.get("SUPABASE_URL") ?? "";
 const SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "";
@@ -147,6 +148,12 @@ Deno.serve(async (req: Request) => {
           "Recibí tu solicitud. Un asesor de Instalaciones Eléctricas J-G te contactará pronto por WhatsApp o teléfono.",
       },
     ]);
+
+    // Owner heads-up on Telegram (skips silently if not configured; never throws).
+    await notifyOwner(
+      admin,
+      formatOwnerNotification({ tipo: "lead_completo", canal: `Web (${fuente})`, contacto, datos }),
+    );
 
     return new Response(
       JSON.stringify({

@@ -1,5 +1,6 @@
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
 import { createClient } from "jsr:@supabase/supabase-js@2";
+import { sendTelegramMessage, telegramChatIdFromContact } from "../_shared/telegram-utils.js";
 
 const WHATSAPP_TOKEN  = Deno.env.get("WHATSAPP_TOKEN") ?? "";
 const PHONE_NUMBER_ID = Deno.env.get("WHATSAPP_PHONE_NUMBER_ID") ?? "";
@@ -76,6 +77,24 @@ Deno.serve(async (req: Request) => {
     if (contactoError || !contacto) {
       return new Response(JSON.stringify({ error: "Contacto no encontrado" }), {
         status: 404, headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    // 5a. Telegram contacts (phone_number = "tg:<chat_id>") → Telegram Bot API
+    const tgChatId = telegramChatIdFromContact(contacto.phone_number);
+    if (tgChatId) {
+      const tgRes = await sendTelegramMessage(Deno.env.get("TELEGRAM_BOT_TOKEN") ?? "", tgChatId, contenido);
+      if (!tgRes?.ok) {
+        return new Response(JSON.stringify({ error: "Error enviando por Telegram", detail: tgRes?.description ?? "" }), {
+          status: 502, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+      await Promise.all([
+        adminClient.from("mensajes").insert({ contacto_id, sender: "agente", contenido }),
+        adminClient.from("contactos").update({ estado_bot: "humano" }).eq("id", contacto_id),
+      ]);
+      return new Response(JSON.stringify({ ok: true, canal: "telegram" }), {
+        status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
 
