@@ -1,5 +1,5 @@
 /**
- * Shared quote + pending-appointment bot flow used by Meta and Twilio WhatsApp webhooks.
+ * Shared quote + pending-appointment bot flow used by Meta/Twilio WhatsApp and Telegram webhooks.
  *
  * Adapters must provide `reply(text)` and `replyChoices(text, buttons)`.
  * Twilio Sandbox should implement replyChoices as numbered plain text.
@@ -41,6 +41,13 @@ export function strField(datos, key) {
  * @param {string} [opts.buttonId]
  * @param {(texto: string) => Promise<void>} opts.reply
  * @param {(texto: string, buttons: { id: string, title: string }[]) => Promise<void>} opts.replyChoices
+ * @param {{ key: string, text: string, validate?: (t: string) => string|null, invalidText?: string }[]} [opts.questions]
+ *   Override question list (e.g. Telegram adds a phone question). Defaults to QUESTIONS.
+ * @param {(q: { key: string, text: string }) => Promise<void>} [opts.replyQuestion]
+ *   Optional custom sender for a question (e.g. attach a request_contact keyboard).
+ * @param {string} [opts.canal] Human label stored in cita notas ("WhatsApp", "Telegram").
+ * @param {(evt: { type: "lead_completo"|"cita_pendiente", contacto: object, cotizacion: object, datos: Record<string, unknown>, slot?: object }) => Promise<void>} [opts.onEvent]
+ *   Optional hook for owner notifications. Errors are swallowed.
  */
 export async function runQuoteBotFlow({
   supabase,
@@ -50,7 +57,22 @@ export async function runQuoteBotFlow({
   buttonId = "",
   reply,
   replyChoices,
+  questions = QUESTIONS,
+  replyQuestion,
+  canal = "WhatsApp",
+  onEvent,
 }) {
+  const askQuestion = replyQuestion ?? ((q) => reply(q.text));
+
+  async function emit(evt) {
+    if (!onEvent) return;
+    try {
+      await onEvent({ contacto, ...evt });
+    } catch (err) {
+      console.error("quote-bot onEvent error:", err);
+    }
+  }
+
   if (contacto.estado_bot === "humano") {
     return { handled: true, reason: "humano" };
   }
@@ -144,19 +166,20 @@ export async function runQuoteBotFlow({
       fecha_hora: slot.iso,
       duracion_min: slot.duracion_min || 60,
       estado: "pendiente",
-      notas: "Solicitada por WhatsApp",
+      notas: `Solicitada por ${canal}`,
     });
 
     if (error) {
       console.error("Error insert cita:", error);
       await reply("Ese horario acaba de ocuparse. Te propongo otras opciones.");
-      await proponerSlots(cotizacion, datos, QUESTIONS.length);
+      await proponerSlots(cotizacion, datos, questions.length);
       return false;
     }
 
     delete datos.__fase;
     delete datos.__slots;
-    await saveDatos(cotizacion.id, datos, QUESTIONS.length);
+    await saveDatos(cotizacion.id, datos, questions.length);
+    await emit({ type: "cita_pendiente", cotizacion, datos, slot });
 
     const cuando = slot.label || formatSlotLabel(slot.iso);
     await handoffHumano(
@@ -168,8 +191,7 @@ export async function runQuoteBotFlow({
   }
 
   if (isNew) {
-    const saludo = QUESTIONS[0].text;
-    await reply(saludo);
+    await askQuestion(questions[0]);
     await supabase.from("cotizaciones").insert({
       contacto_id: contacto.id,
       datos: {},
@@ -230,13 +252,13 @@ export async function runQuoteBotFlow({
   if (fase === FASE_OFERTA) {
     const choice = parseCitaChoice(incomingText, buttonId);
     if (choice === "agendar") {
-      await proponerSlots(cotizacion, datos, Math.max(paso, QUESTIONS.length));
+      await proponerSlots(cotizacion, datos, Math.max(paso, questions.length));
       return { handled: true, reason: "oferta_agendar" };
     }
     if (choice === "solo_cotizacion") {
       delete datos.__fase;
       delete datos.__slots;
-      await saveDatos(cotizacion.id, datos, Math.max(paso, QUESTIONS.length));
+      await saveDatos(cotizacion.id, datos, Math.max(paso, questions.length));
       await handoffHumano("¡Perfecto! Un asesor te contactará en breve con tu cotización. 🙌");
       return { handled: true, reason: "oferta_solo" };
     }
@@ -280,25 +302,36 @@ export async function runQuoteBotFlow({
     return { handled: true, reason: "agendar_after_nombre" };
   }
 
-  if (paso > 0 && paso <= QUESTIONS.length && incomingText) {
-    const prevKey = QUESTIONS[paso - 1].key;
-    if (!strField(datos, prevKey)) datos[prevKey] = incomingText;
+  if (paso > 0 && paso <= questions.length && incomingText) {
+    const prevQ = questions[paso - 1];
+    const prevKey = prevQ.key;
+    let value = incomingText;
+    if (prevQ.validate && !strField(datos, prevKey)) {
+      const ok = prevQ.validate(incomingText);
+      if (ok === null) {
+        await askQuestion({ ...prevQ, text: prevQ.invalidText || prevQ.text });
+        return { handled: true, reason: "invalid_answer" };
+      }
+      value = ok;
+    }
+    if (!strField(datos, prevKey)) datos[prevKey] = value;
     if (prevKey === "nombre" && incomingText) {
       await supabase.from("contactos").update({ nombre: incomingText.trim() }).eq("id", contacto.id);
     }
   }
   delete datos["__started"];
 
-  const nextIdx = QUESTIONS.findIndex((q) => !strField(datos, q.key));
-  const pendingQuestion = nextIdx !== -1 ? QUESTIONS[nextIdx] : null;
-  const nuevosPaso = pendingQuestion ? nextIdx + 1 : QUESTIONS.length;
+  const nextIdx = questions.findIndex((q) => !strField(datos, q.key));
+  const pendingQuestion = nextIdx !== -1 ? questions[nextIdx] : null;
+  const nuevosPaso = pendingQuestion ? nextIdx + 1 : questions.length;
 
   await saveDatos(cotizacion.id, datos, nuevosPaso);
 
   if (pendingQuestion) {
-    await reply(pendingQuestion.text);
+    await askQuestion(pendingQuestion);
   } else {
     await ofrecerCita(cotizacion, datos, nuevosPaso);
+    await emit({ type: "lead_completo", cotizacion, datos });
   }
 
   return { handled: true, reason: pendingQuestion ? "ask_question" : "oferta_cita" };

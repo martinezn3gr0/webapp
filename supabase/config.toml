@@ -9,3 +9,7 @@ verify_jwt = false
 
 [functions.submit-lead]
 verify_jwt = false
+
+# Telegram calls the webhook without a Supabase JWT; auth is the secret_token header.
+[functions.telegram-webhook]
+verify_jwt = false
