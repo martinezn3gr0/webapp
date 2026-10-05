@@ -1,4 +1,8 @@
 {
+  "redirects": [
+    { "source": "/cotizar", "destination": "/#cotizar", "permanent": false },
+    { "source": "/cotizar/", "destination": "/#cotizar", "permanent": false }
+  ],
   "rewrites": [
     { "source": "/((?!robots\\.txt|sitemap\\.xml|manifest\\.json|sw\\.js|.*\\..*).*)", "destination": "/index.html" }
   ],

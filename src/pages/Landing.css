@@ -772,6 +772,7 @@ a.landing-contact__value:hover {
   border: 1px solid var(--l-line);
   border-radius: 18px;
   padding: 32px;
+  scroll-margin-top: 96px; /* deja libre el header fijo al llegar por /#cotizar */
 }
 
 .landing-form {
