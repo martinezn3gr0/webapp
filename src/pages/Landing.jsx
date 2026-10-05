@@ -85,6 +85,21 @@ const ZONAS_COBERTURA = [
   'Tlalpan',
 ];
 
+
+const CERTIFICADOS = [
+  {
+    id: 'electricista-capacitate-2026',
+    title: 'Curso de Electricista — Capacítate para el empleo (Fundación Carlos Slim)',
+    meta: '46 horas · Calificación 8.83 · 2026',
+    thumb: '/certificados/electricista-carlos-slim-thumb.webp',
+    image: '/certificados/electricista-carlos-slim.webp',
+    pdf: '/certificados/electricista-carlos-slim.pdf',
+    verifyUrl:
+      'https://aprende.org/verifica/8eaad152-3a17-43fe-92a5-30790582823d/c27b9d5d-c664-4628-88f9-a4f5e5beb4e2',
+    alt: 'Certificado del curso Electricista de Capacítate para el empleo, Fundación Carlos Slim, otorgado a Jorge Francisco Martinez Cruz',
+  },
+];
+
 const TRABAJOS = [
   {
     src: '/portfolio/tableros-cableado-organizado.jpg',
@@ -616,6 +631,54 @@ export default function Landing() {
               Ver reseñas en Google
             </a>
           </Reveal>
+        </section>
+
+
+        <section className="landing__section landing-certs" id="capacitacion">
+          <Reveal>
+            <div className="landing__eyebrow">Confianza y formación</div>
+            <h2 className="landing__heading">Capacitación y certificaciones</h2>
+            <p className="landing__subhead">
+              Formación continua en electricidad. Aquí publico los cursos y certificados
+              que respaldo con verificación pública.
+            </p>
+          </Reveal>
+          <div className="landing-certs__grid">
+            {CERTIFICADOS.map((cert) => (
+              <Reveal className="landing-cert-card" key={cert.id}>
+                <a
+                  className="landing-cert-card__thumb"
+                  href={cert.image}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <img
+                    src={cert.thumb}
+                    alt={cert.alt}
+                    loading="lazy"
+                    width="400"
+                    height="309"
+                  />
+                </a>
+                <div className="landing-cert-card__body">
+                  <h3 className="landing-cert-card__title">{cert.title}</h3>
+                  <p className="landing-cert-card__meta">{cert.meta}</p>
+                  <div className="landing-cert-card__links">
+                    <a
+                      href={cert.verifyUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      Verificar autenticidad
+                    </a>
+                    <a href={cert.pdf} target="_blank" rel="noopener noreferrer">
+                      Ver PDF
+                    </a>
+                  </div>
+                </div>
+              </Reveal>
+            ))}
+          </div>
         </section>
 
         <section className="landing__section landing-contact" id="contacto" ref={contactRef}>
