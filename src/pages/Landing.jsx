@@ -348,6 +348,24 @@ export default function Landing() {
     }
   }
 
+  // La landing se renderiza en el cliente, así que el navegador no alcanza a
+  // hacer scroll al #ancla de la URL (p. ej. /cotizar → /#cotizar). Lo hacemos
+  // al montar y otra vez cuando terminan de cargar imágenes/fuentes, por si el
+  // layout se movió.
+  useEffect(() => {
+    const id = decodeURIComponent(window.location.hash.slice(1));
+    if (!id) return undefined;
+    const scrollToHash = () => document.getElementById(id)?.scrollIntoView({ block: 'start' });
+    const raf = requestAnimationFrame(scrollToHash);
+    const timer = setTimeout(scrollToHash, 600);
+    window.addEventListener('load', scrollToHash, { once: true });
+    return () => {
+      cancelAnimationFrame(raf);
+      clearTimeout(timer);
+      window.removeEventListener('load', scrollToHash);
+    };
+  }, []);
+
   useEffect(() => {
     const el = contactRef.current;
     if (!el || typeof IntersectionObserver === 'undefined') return undefined;
@@ -647,7 +665,7 @@ export default function Landing() {
             </Reveal>
 
             <Reveal>
-              <div className="landing-form-card">
+              <div className="landing-form-card" id="cotizar">
                 <form className="landing-form" onSubmit={handleSubmit}>
                   <div className="landing-form__row">
                     <div className="landing-form__field">
