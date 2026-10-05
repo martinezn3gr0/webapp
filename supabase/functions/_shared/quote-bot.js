@@ -21,6 +21,21 @@ export const QUESTIONS = [
 export const FASE_OFERTA = "ofreciendo_cita";
 export const FASE_SLOT = "eligiendo_slot";
 
+/**
+ * Optional fee amount appended to visit-cost notices when set, e.g. " ($350 MXN)".
+ * Leave empty until the owner defines a price — do not invent one.
+ */
+export const VISIT_FEE_TEXT = "";
+
+/** Base notice that an on-site visit has a cost (deducted if the client hires). */
+export const VISIT_COST_NOTICE_BASE =
+  "La visita técnica a domicilio tiene costo; si contratas el trabajo, se descuenta del total.";
+
+/** Full visit-cost notice, with VISIT_FEE_TEXT appended when non-empty. */
+export function visitCostNotice() {
+  return VISIT_FEE_TEXT ? `${VISIT_COST_NOTICE_BASE}${VISIT_FEE_TEXT}` : VISIT_COST_NOTICE_BASE;
+}
+
 /** @param {unknown} raw */
 export function asDatos(raw) {
   return (raw && typeof raw === "object" ? { ...raw } : {});
@@ -120,7 +135,8 @@ export async function runQuoteBotFlow({
       "¡Gracias! Ya tengo tus datos para la cotización (sin precios todavía; un asesor te confirma el monto).\n\n" +
       "¿Deseas agendar una visita técnica?\n" +
       "1) Solo cotización — un asesor te contacta\n" +
-      "2) Quiero agendar una visita";
+      "2) Quiero agendar una visita\n\n" +
+      visitCostNotice();
     await replyChoices(texto, [
       { id: "solo_cotizacion", title: "Solo cotización" },
       { id: "agendar_visita", title: "Agendar visita" },
@@ -147,7 +163,8 @@ export async function runQuoteBotFlow({
 
     const lineas = slots.map((s, i) => `${i + 1}) ${s.label}`).join("\n");
     const texto =
-      "Estos son los próximos horarios disponibles (hora Ciudad de México).\n" +
+      visitCostNotice() +
+      "\n\nEstos son los próximos horarios disponibles (hora Ciudad de México).\n" +
       "Responde con 1, 2 o 3, o el horario que prefieras:\n\n" +
       lineas +
       "\n\nLa cita quedará pendiente hasta que un técnico la confirme.";
@@ -263,7 +280,10 @@ export async function runQuoteBotFlow({
       return { handled: true, reason: "oferta_solo" };
     }
     await replyChoices(
-      "¿Deseas agendar una visita técnica o solo la cotización?\n1) Solo cotización\n2) Agendar visita",
+      "¿Deseas agendar una visita técnica o solo la cotización?\n" +
+        "1) Solo cotización\n" +
+        "2) Agendar visita\n\n" +
+        visitCostNotice(),
       [
         { id: "solo_cotizacion", title: "Solo cotización" },
         { id: "agendar_visita", title: "Agendar visita" },

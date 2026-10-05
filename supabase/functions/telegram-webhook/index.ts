@@ -48,8 +48,9 @@ const TELEGRAM_QUESTIONS = [...QUESTIONS, TELEFONO_QUESTION];
 
 const AYUDA =
   "Soy el asistente de *Instalaciones Eléctricas JG* (CDMX y Edomex) ⚡\n\n" +
-  "Te ayudo a pedir una cotización y, si quieres, a solicitar una visita técnica " +
-  "(lunes a sábado, 8:00 a 20:00). Un técnico confirma la cita y el monto.\n\n" +
+  "Te ayudo a pedir una cotización gratis en línea y, si quieres, a solicitar una visita técnica " +
+  "(lunes a sábado, 8:00 a 20:00). La visita a domicilio tiene costo; se descuenta del total si contratas. " +
+  "Un técnico confirma la cita y el monto.\n\n" +
   "Comandos:\n/cotizar — iniciar o continuar una cotización\n/ayuda — ver esta ayuda";
 
 Deno.serve(async (req: Request) => {

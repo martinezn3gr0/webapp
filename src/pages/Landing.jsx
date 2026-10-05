@@ -65,13 +65,13 @@ const PROCESO = [
   },
   {
     num: '02',
-    title: 'Cotización sin costo',
-    desc: 'Te doy un diagnóstico inicial y un rango de precio antes de visitar el lugar.',
+    title: 'Cotización gratis en línea',
+    desc: 'Te doy un diagnóstico inicial y un rango de precio por WhatsApp o formulario, sin costo.',
   },
   {
     num: '03',
     title: 'Se hace el trabajo',
-    desc: 'Visito, confirmo el alcance final y realizo la instalación o reparación.',
+    desc: 'La visita técnica a domicilio tiene costo (se descuenta del total si contratas). Confirmo el alcance y realizo el trabajo.',
   },
 ];
 
@@ -442,7 +442,7 @@ export default function Landing() {
                 <div className="landing-hero__stat-divider" />
                 <div>
                   <div className="landing-hero__stat-num">100%</div>
-                  <div className="landing-hero__stat-label">Sin costo inicial</div>
+                  <div className="landing-hero__stat-label">Cotización gratis en línea</div>
                 </div>
               </div>
             </Reveal>
@@ -821,8 +821,9 @@ export default function Landing() {
         <div className="landing-legal__inner">
           <h2>Términos y Condiciones</h2>
           <p>
-            Las cotizaciones son gratuitas y sin compromiso. Los precios pueden variar según visita
-            técnica. Servicio garantizado.
+            La cotización en línea (WhatsApp o formulario) es gratuita y sin compromiso. La visita
+            técnica a domicilio tiene costo y se descuenta del total si contratas el trabajo. Servicio
+            garantizado.
           </p>
         </div>
       </section>
