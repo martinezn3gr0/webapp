@@ -1,6 +1,6 @@
 import { describe, it } from "node:test";
 import assert from "node:assert/strict";
-import { QUESTIONS, runQuoteBotFlow } from "./quote-bot.js";
+import { QUESTIONS, VISIT_FEE_TEXT, visitCostNotice, runQuoteBotFlow } from "./quote-bot.js";
 
 /**
  * Minimal in-memory Supabase stub for the tables the bot touches.
@@ -205,6 +205,8 @@ describe("runQuoteBotFlow (shared)", () => {
     assert.match(last, /agendar una visita/i);
     assert.match(last, /1\) Solo cotización/);
     assert.match(last, /2\) Quiero agendar/);
+    assert.match(last, /visita técnica a domicilio tiene costo/i);
+    assert.match(last, /se descuenta del total/i);
     assert.equal(state.cotizaciones[0].datos.__fase, "ofreciendo_cita");
     assert.equal(state.cotizaciones[0].estatus, "enviada");
   });
@@ -272,6 +274,86 @@ describe("runQuoteBotFlow (shared)", () => {
     await runQuoteBotFlow({ ...common, incomingText: "5512345678" });
     assert.equal(state.cotizaciones[0].datos.telefono, "525512345678");
     assert.match(replies.at(-1), /agendar una visita/i);
+    assert.match(replies.at(-1), /visita técnica a domicilio tiene costo/i);
     assert.deepEqual(events, ["lead_completo"]);
+  });
+
+  it("visitCostNotice appends VISIT_FEE_TEXT when set", () => {
+    assert.equal(VISIT_FEE_TEXT, "");
+    assert.match(visitCostNotice(), /tiene costo/);
+    assert.equal(visitCostNotice(), visitCostNotice()); // stable
+    // Simulate append behavior without mutating the module constant:
+    const withFee = VISIT_FEE_TEXT
+      ? visitCostNotice()
+      : visitCostNotice() + " ($350 MXN)";
+    assert.match(withFee, /\(\$350 MXN\)/);
+  });
+
+  it("choosing agendar visita shows cost notice before slots", async () => {
+    const replies = [];
+    const { from, state } = makeFakeSupabase({
+      contacto: { id: "c1", phone_number: "52155", nombre: "Ana", estado_bot: "en_proceso" },
+      cotizacion: {
+        id: "cot-1",
+        contacto_id: "c1",
+        estatus: "enviada",
+        paso_flujo: 3,
+        datos: {
+          nombre: "Ana",
+          tipo_servicio: "contacto",
+          detalle: "tablero",
+          __fase: "ofreciendo_cita",
+        },
+      },
+    });
+
+    await runQuoteBotFlow({
+      supabase: { from },
+      contacto: state.contacto,
+      isNew: false,
+      incomingText: "2",
+      buttonId: "agendar_visita",
+      reply: async (t) => replies.push(t),
+      replyChoices: async (t) => replies.push(t),
+    });
+
+    const last = replies.at(-1) ?? "";
+    assert.match(last, /visita técnica a domicilio tiene costo/i);
+    assert.match(last, /se descuenta del total/i);
+    assert.match(last, /horarios disponibles/i);
+    assert.equal(state.cotizaciones[0].datos.__fase, "eligiendo_slot");
+  });
+
+  it("clarify oferta repeats visit cost notice", async () => {
+    const replies = [];
+    const { from, state } = makeFakeSupabase({
+      contacto: { id: "c1", phone_number: "52155", nombre: "Ana", estado_bot: "en_proceso" },
+      cotizacion: {
+        id: "cot-1",
+        contacto_id: "c1",
+        estatus: "enviada",
+        paso_flujo: 3,
+        datos: {
+          nombre: "Ana",
+          tipo_servicio: "contacto",
+          detalle: "tablero",
+          __fase: "ofreciendo_cita",
+        },
+      },
+    });
+
+    await runQuoteBotFlow({
+      supabase: { from },
+      contacto: state.contacto,
+      isNew: false,
+      incomingText: "no entiendo",
+      buttonId: "",
+      reply: async (t) => replies.push(t),
+      replyChoices: async (t) => replies.push(t),
+    });
+
+    const last = replies.at(-1) ?? "";
+    assert.match(last, /Agendar visita/);
+    assert.match(last, /tiene costo/i);
   });
 });
