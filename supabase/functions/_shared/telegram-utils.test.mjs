@@ -9,6 +9,7 @@ import {
   notifyOwner,
   parseCommand,
   safeEqual,
+  sendTelegramDocument,
   telegramChatIdFromContact,
   telegramContactId,
   toTelegramHtml,
@@ -78,5 +79,32 @@ describe("telegram-utils", () => {
     });
     assert.match(t, /PENDIENTE/);
     assert.doesNotMatch(t, /Teléfono: tg:/);
+  });
+});
+
+describe("sendTelegramDocument", () => {
+  it("sube el archivo como multipart con caption HTML y no expone el token en logs", async () => {
+    const realFetch = globalThis.fetch;
+    let captured;
+    globalThis.fetch = async (url, init) => {
+      captured = { url, init };
+      return new Response(JSON.stringify({ ok: true, result: { message_id: 7 } }));
+    };
+    try {
+      const blob = new Blob(["%PDF-1.4"], { type: "application/pdf" });
+      const res = await sendTelegramDocument("TKN", 123, blob, "Cotizacion_COT-2026-0001.pdf", "Hola *Jorge* <3");
+      assert.equal(res.ok, true);
+      assert.equal(captured.url, "https://api.telegram.org/botTKN/sendDocument");
+      const form = captured.init.body;
+      assert.equal(form.get("chat_id"), "123");
+      assert.equal(form.get("caption"), "Hola <b>Jorge</b> &lt;3");
+      assert.equal(form.get("parse_mode"), "HTML");
+      assert.equal(form.get("document").name, "Cotizacion_COT-2026-0001.pdf");
+    } finally {
+      globalThis.fetch = realFetch;
+    }
+  });
+  it("sin token no llama a la red", async () => {
+    assert.equal((await sendTelegramDocument("", 1, new Blob([]), "a.pdf")).ok, false);
   });
 });

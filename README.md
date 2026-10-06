@@ -149,3 +149,41 @@ automáticamente en cada función.
 Al configurar el webhook en el App Dashboard de Meta, la URL de callback es
 la de la función `whatsapp-webhook` y el "Verify Token" debe ser exactamente
 el mismo valor que guardes en el secret `META_VERIFY_TOKEN`.
+
+## 7. Cotizaciones formales (PDF)
+
+En `/panel/chats`, dentro de la conversación, la barra de **Cotización** tiene
+**Cotización formal (PDF)** / **Editar / PDF** y **+ Nueva**.
+
+- **Editor** (`src/components/QuoteEditor.jsx`): conceptos (concepto,
+  descripción opcional, cantidad, unidad, precio unitario → importe), fecha,
+  vigencia (15 días por defecto), descuento por visita técnica, IVA opcional
+  (16% por defecto, tasa editable), anticipo (% solo informativo) y
+  condiciones. Totales en vivo. Ningún precio se llena solo.
+- **Guardar** llama al RPC `guardar_cotizacion` (una sola transacción). El
+  primer guardado asigna el folio `COT-AAAA-NNNN`.
+- **Descargar PDF** genera el PDF tamaño carta en el navegador
+  (`src/lib/quotePdf.js`, jsPDF + autotable; se carga solo al abrir el editor).
+- **Enviar al cliente** sube el PDF al bucket privado `cotizaciones-pdf`
+  (`<cotizacion_id>/Cotizacion_<folio>.pdf`) y llama a `send-message` con
+  `cotizacion_id` + `documento`:
+  - Telegram (`tg:<chat_id>`): manda el **archivo PDF** (sendDocument) con el
+    mensaje como caption. Si falla, manda el texto con enlace.
+  - WhatsApp: manda el texto con un **enlace firmado válido 30 días**.
+  - Marca la cotización `enviada` (no degrada `aceptada`/`rechazada`),
+    `sent_at` y `pdf_path`.
+
+### Datos (`supabase/migrations/20261006120000_cotizaciones_formales.sql`)
+
+- `cotizaciones`: `folio`, `fecha`, `vigencia_dias`, `moneda`, `subtotal`,
+  `aplica_iva`, `iva_tasa`, `iva_monto`, `descuento_visita`, `total`,
+  `condiciones`, `anticipo_porcentaje`, `sent_at`, `pdf_path`.
+- `cotizacion_partidas`: partidas con `importe` generado.
+- `folio_contadores`: contador por serie/año (listo para OT/REC/FAC).
+- Los totales los calcula la BD (trigger): `base = subtotal − descuento`,
+  `IVA = base × tasa` (igual que la base de un CFDI), `total = base + IVA`.
+  `datos.monto` se mantiene igual a `total` por compatibilidad. Las
+  cotizaciones sin folio (solicitudes del bot) no se tocan.
+- RLS: igual que el resto del panel (`es_agente()`), también en Storage.
+
+Pruebas: `npm test`. PDF de ejemplo: `node scripts/render-quote-sample.mjs salida.pdf`.

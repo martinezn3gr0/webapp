@@ -150,6 +150,37 @@ export function sendTelegramMessage(token, chatId, text, replyMarkup) {
 }
 
 /**
+ * Send a file (e.g. quote PDF) with sendDocument via multipart upload.
+ * @param {string} token
+ * @param {string|number} chatId
+ * @param {Blob} file
+ * @param {string} filename
+ * @param {string} [caption] plain text (WhatsApp-style *bold* allowed), max 1024 chars
+ */
+export async function sendTelegramDocument(token, chatId, file, filename, caption) {
+  if (!token) {
+    console.error("sendTelegramDocument: missing TELEGRAM_BOT_TOKEN");
+    return { ok: false, description: "missing token" };
+  }
+  try {
+    const form = new FormData();
+    form.append("chat_id", String(chatId));
+    form.append("document", file, filename);
+    if (caption) {
+      form.append("caption", toTelegramHtml(caption));
+      form.append("parse_mode", "HTML");
+    }
+    const res = await fetch(`https://api.telegram.org/bot${token}/sendDocument`, { method: "POST", body: form });
+    const json = await res.json().catch(() => ({ ok: false }));
+    if (!json.ok) console.error("telegram sendDocument failed:", json.description ?? res.status);
+    return json;
+  } catch (err) {
+    console.error("telegram sendDocument error:", String(err));
+    return { ok: false, description: String(err) };
+  }
+}
+
+/**
  * Owner chat id: secret TELEGRAM_OWNER_CHAT_ID wins; otherwise app_settings row
  * written by `/soyjorge <code>`. Returns "" if none.
  */
