@@ -51,7 +51,7 @@ export default function ChatWindow({ contacto }) {
         </div>
       </div>
 
-      <QuoteSummary contactoId={contacto.id} />
+      <QuoteSummary contactoId={contacto.id} contacto={contacto} />
 
       <div className="chat-window__messages">
         {error && <p className="chat-window__error">No se pudieron cargar los mensajes: {error}</p>}

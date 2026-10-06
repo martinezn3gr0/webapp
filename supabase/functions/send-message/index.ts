@@ -1,6 +1,15 @@
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
 import { createClient } from "jsr:@supabase/supabase-js@2";
-import { sendTelegramMessage, telegramChatIdFromContact } from "../_shared/telegram-utils.js";
+import { sendTelegramDocument, sendTelegramMessage, telegramChatIdFromContact } from "../_shared/telegram-utils.js";
+import {
+  QUOTE_PDF_BUCKET,
+  SIGNED_URL_TTL_SECONDS,
+  captionTelegram,
+  estatusTrasEnvio,
+  textoConEnlace,
+  textoRegistro,
+  validarDocumentoCotizacion,
+} from "../_shared/quote-send-utils.js";
 
 const WHATSAPP_TOKEN  = Deno.env.get("WHATSAPP_TOKEN") ?? "";
 const PHONE_NUMBER_ID = Deno.env.get("WHATSAPP_PHONE_NUMBER_ID") ?? "";
@@ -10,6 +19,91 @@ const SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "";
 const ALLOWED_ORIGIN  = Deno.env.get("PANEL_ORIGIN") ?? "https://instelecjg.vercel.app";
 
 const GRAPH_URL = `https://graph.facebook.com/v20.0/${PHONE_NUMBER_ID}/messages`;
+
+function json(body: unknown, status = 200) {
+  return new Response(JSON.stringify(body), {
+    status, headers: { ...corsHeaders, "Content-Type": "application/json" },
+  });
+}
+
+async function sendWhatsAppText(to: string, body: string) {
+  return await fetch(GRAPH_URL, {
+    method: "POST",
+    headers: { Authorization: `Bearer ${WHATSAPP_TOKEN}`, "Content-Type": "application/json" },
+    body: JSON.stringify({ messaging_product: "whatsapp", to, type: "text", text: { body } }),
+  });
+}
+
+/**
+ * Envía el PDF de una cotización:
+ *  - Telegram: el archivo directo (sendDocument); si falla, texto + enlace firmado.
+ *  - WhatsApp: texto + enlace firmado (30 días). Meta exige plantillas/sesión para documentos.
+ * Después marca la cotización como enviada (sent_at, pdf_path).
+ */
+// deno-lint-ignore no-explicit-any
+async function enviarCotizacion({ adminClient, contacto, contacto_id, contenido, cotizacion_id, documento, tgChatId }: any) {
+  const doc = validarDocumentoCotizacion(documento, cotizacion_id);
+  if (!doc.ok) return json({ error: doc.error }, 400);
+
+  const { data: cot, error: cotError } = await adminClient
+    .from("cotizaciones")
+    .select("id, contacto_id, estatus")
+    .eq("id", cotizacion_id)
+    .maybeSingle();
+  if (cotError || !cot || cot.contacto_id !== contacto.id) {
+    return json({ error: "La cotización no pertenece a este contacto" }, 404);
+  }
+
+  const storage = adminClient.storage.from(QUOTE_PDF_BUCKET);
+  const { data: signed, error: signError } = await storage.createSignedUrl(doc.path, SIGNED_URL_TTL_SECONDS, {
+    download: doc.filename,
+  });
+  if (signError || !signed?.signedUrl) {
+    return json({ error: "No se encontró el PDF en Storage", detail: signError?.message ?? "" }, 404);
+  }
+  const signedUrl = signed.signedUrl as string;
+
+  let canal = "whatsapp";
+  let modo: "adjunto" | "enlace" = "enlace";
+
+  if (tgChatId) {
+    canal = "telegram";
+    const token = Deno.env.get("TELEGRAM_BOT_TOKEN") ?? "";
+    const { data: blob, error: dlError } = await storage.download(doc.path);
+    let tgRes = null;
+    if (!dlError && blob) {
+      tgRes = await sendTelegramDocument(token, tgChatId, blob, doc.filename, captionTelegram(contenido));
+    }
+    if (tgRes?.ok) {
+      modo = "adjunto";
+    } else {
+      const fallback = await sendTelegramMessage(token, tgChatId, textoConEnlace(contenido, signedUrl));
+      if (!fallback?.ok) {
+        return json({ error: "Error enviando por Telegram", detail: fallback?.description ?? tgRes?.description ?? "" }, 502);
+      }
+    }
+  } else {
+    const waRes = await sendWhatsAppText(contacto.phone_number, textoConEnlace(contenido, signedUrl));
+    if (!waRes.ok) {
+      const errText = await waRes.text();
+      console.error("Error de WhatsApp:", errText);
+      return json({ error: "Error enviando por WhatsApp", detail: errText }, 502);
+    }
+  }
+
+  const sentAt = new Date().toISOString();
+  await Promise.all([
+    adminClient.from("mensajes").insert({
+      contacto_id, sender: "agente", contenido: textoRegistro(contenido, { filename: doc.filename, modo, url: signedUrl }),
+    }),
+    adminClient.from("contactos").update({ estado_bot: "humano" }).eq("id", contacto_id),
+    adminClient.from("cotizaciones")
+      .update({ estatus: estatusTrasEnvio(cot.estatus), sent_at: sentAt, pdf_path: doc.path })
+      .eq("id", cot.id),
+  ]);
+
+  return json({ ok: true, canal, documento: modo, sent_at: sentAt, signed_url: signedUrl });
+}
 
 const corsHeaders = {
   "Access-Control-Allow-Origin":  ALLOWED_ORIGIN,
@@ -60,7 +154,9 @@ Deno.serve(async (req: Request) => {
     }
 
     // 3. Obtener payload
-    const { contacto_id, contenido } = await req.json();
+    //    Opcional (cotización formal): cotizacion_id + documento { path, filename } con el PDF
+    //    ya subido al bucket privado `cotizaciones-pdf`. Sin `documento` el flujo es idéntico al de siempre.
+    const { contacto_id, contenido, cotizacion_id, documento } = await req.json();
     if (!contacto_id || !contenido) {
       return new Response(JSON.stringify({ error: "Faltan contacto_id o contenido" }), {
         status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -80,8 +176,16 @@ Deno.serve(async (req: Request) => {
       });
     }
 
-    // 5a. Telegram contacts (phone_number = "tg:<chat_id>") → Telegram Bot API
     const tgChatId = telegramChatIdFromContact(contacto.phone_number);
+
+    // 4b. Envío de cotización formal con PDF
+    if (documento) {
+      return await enviarCotizacion({
+        adminClient, contacto, contacto_id, contenido, cotizacion_id, documento, tgChatId,
+      });
+    }
+
+    // 5a. Telegram contacts (phone_number = "tg:<chat_id>") → Telegram Bot API
     if (tgChatId) {
       const tgRes = await sendTelegramMessage(Deno.env.get("TELEGRAM_BOT_TOKEN") ?? "", tgChatId, contenido);
       if (!tgRes?.ok) {
