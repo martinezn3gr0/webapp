@@ -423,7 +423,7 @@
   margin: 0;
 }
 
-/* Services — extra bottom space on small screens so sticky WA doesn't cover prices */
+/* Services — extra bottom space on small screens so sticky WA doesn't cover the cards */
 .landing__section.landing-services {
   padding-bottom: 184px;
 }
@@ -509,15 +509,7 @@
   font-size: 14px;
   color: var(--l-ink-soft);
   line-height: 1.5;
-  margin: 0 0 20px;
-}
-
-.landing-service-card__price {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 12px;
-  color: var(--l-primary);
-  border-top: 1px solid var(--l-line);
-  padding-top: 20px;
+  margin: 0;
 }
 
 /* Process */
