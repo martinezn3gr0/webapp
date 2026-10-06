@@ -60,7 +60,7 @@ const PROCESO = [
   {
     num: '02',
     title: 'Cotización gratis en línea',
-    desc: 'Cuéntame qué necesitas por WhatsApp o el formulario y te doy un diagnóstico inicial sin costo.',
+    desc: 'Con las fotos y datos que me mandes por WhatsApp o el formulario, te doy un diagnóstico inicial sin costo.',
   },
   {
     num: '03',
