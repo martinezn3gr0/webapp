@@ -21,39 +21,33 @@ const SERVICIOS = [
     icon: 'home',
     title: 'Instalación eléctrica residencial',
     desc: 'Circuitos, contactos y apagadores en casa habitación. Incluye material y mano de obra.',
-    price: '$3,000 – $8,000 / hab.',
     wide: true,
   },
   {
     icon: 'store',
     title: 'Comercial',
     desc: 'Negocios, oficinas y locales comerciales.',
-    price: 'Por proyecto',
   },
   {
     icon: 'verified',
     title: 'Mantenimiento',
     desc: 'Revisión general y detección temprana.',
-    price: '$1,500 – $3,500',
   },
   {
     icon: 'bolt',
     title: 'Cortocircuitos',
     desc: 'Diagnóstico y reparación de fallas críticas.',
-    price: '$400 – $1,200',
   },
   {
     icon: 'tools',
     title: 'Cambio de instalación antigua',
     desc: 'Renovación de instalaciones con más de 15-20 años o cableado en riesgo.',
-    price: 'Desde $3,000 / hab.',
     wide: true,
   },
   {
     icon: 'grid',
     title: 'Tableros',
     desc: 'Instalación de centros de carga.',
-    price: '$1,800 – $3,500',
   },
 ];
 
@@ -66,7 +60,7 @@ const PROCESO = [
   {
     num: '02',
     title: 'Cotización gratis en línea',
-    desc: 'Te doy un diagnóstico inicial y un rango de precio por WhatsApp o formulario, sin costo.',
+    desc: 'Cuéntame qué necesitas por WhatsApp o el formulario y te doy un diagnóstico inicial sin costo.',
   },
   {
     num: '03',
@@ -521,10 +515,6 @@ export default function Landing() {
               <br />
               un solo estándar de calidad.
             </h2>
-            <p className="landing__subhead">
-              Precios de referencia — el costo final depende de materiales y condiciones del lugar.
-              Cotización exacta sin costo por WhatsApp.
-            </p>
           </Reveal>
           <div className="landing-services__grid">
             {SERVICIOS.map((s) => (
@@ -539,7 +529,6 @@ export default function Landing() {
                   <h3 className="landing-service-card__title">{s.title}</h3>
                   <p className="landing-service-card__desc">{s.desc}</p>
                 </div>
-                <div className="landing-service-card__price">{s.price}</div>
               </Reveal>
             ))}
           </div>
